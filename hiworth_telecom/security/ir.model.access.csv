@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+master_data_access_user,Grant rw to master_data,model_master_data,,1,1,1,1
+billing_access_user,Grant rw to billing,model_telecom_billing,,1,1,1,1
+

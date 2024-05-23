@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report 
+            id="action_report_comparative_statement_order"
+            model="bill.of.quantity"
+            string="Comparative Statement"
+            report_type="qweb-pdf"
+            name="hiworth_boq.report_comparative_statement"
+            file="hiworth_boq.report_comparative_statement"
+        />
+
+        <report 
+            id="action_report_revised_estimate_order"
+            model="bill.of.quantity"
+            string="Revised Estimate"
+            report_type="qweb-pdf"
+            name="hiworth_boq.report_revised_estimate"
+            file="hiworth_boq.report_revised_estimate"
+        />
+
+        <report 
+            id="action_report_first_bill"
+            model="account.invoice"
+            string="First Bill"
+            report_type="qweb-pdf"
+            name="hiworth_boq.report_first_bill"
+            file="hiworth_boq.report_first_bill"
+        />
+
+    </data>
+</openerp>

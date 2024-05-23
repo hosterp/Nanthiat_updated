@@ -1,0 +1,179 @@
+<openerp>
+    <data>
+        <record id="view_site_expense_wizard_form" model="ir.ui.view">
+            <field name="name">site_expense_details_form</field>
+            <field name="model">site.expense</field>
+            <field name="arch" type="xml">
+                <form string="My Wizard Title">
+                    <sheet>
+                        <group col="2">
+                            <group>
+                                <field name="from_date" string="Date From"/>
+                                <field name="to_date" string="Date To"/>
+
+                            </group>
+                            <group>
+                                <field name="project_id"/>
+                                <!--                                <field name="contractor" string="Contractor"/>-->
+                            </group>
+                        </group>
+
+                    </sheet>
+                    <footer>
+                        <button name="prin_site_expense_details_report" string="Print" type="object"
+                                class="oe_highlight"/>
+                        <button name="view_site_expense_details_report" string="View" type="object"
+                                class="oe_highlight"/>
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <template id="external_layout_header_inherit_site_expense_details">
+            <div class="header">
+                <div class="row">
+                    <div class="col-xs-12 text-center">
+                        <t t-if="company and company.logo">
+                            <img t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 80px;"/>
+                        </t>
+                    </div>
+                </div>
+                <div class="col-xs-12 text-center" style="font-size: 20px; margin-top: 10px;">
+                    <div style="border-style: solid;">
+                        <b>Site Expense</b>
+                    </div>
+                </div>
+                <div class="row zero_min_height">
+                    <div class="col-xs-12" align="center">
+                        <div style="width: 18%; border-bottom: 1px solid black;"></div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!--        .............................................Template.................................................................#-->
+        <template id="report_site_expense_details_template_view">
+            <t t-call="report.html_container">
+                <t t-call="report.external_layout">
+                    <div class="page">
+
+                        <t t-foreach="docs" t-as="o">
+                            <t t-call="hiworth_construction.external_layout_header_inherit_site_expense_details"/>
+                            <br></br>
+                            <table class="table table-bordered">
+                                <tr>
+                                    <td>Date From :
+                                        <span t-field="o.from_date"/>
+                                    </td>
+                                    <td>Date To :
+                                        <span t-field="o.to_date"/>
+                                    </td>
+                                    <!--                                    <td>-->
+                                    <!--                                        <Supplier>Supplier</Supplier>-->
+                                    <!--                                        :-->
+                                    <!--                                        <span t-field="o.partner_id.name"/>-->
+                                    <!--                                    </td>-->
+                                    <td>
+                                        <Supplier>Project</Supplier>
+                                        :
+                                        <span t-field="o.project_id.name"/>
+                                    </td>
+
+                                </tr>
+                            </table>
+                            <table class="table table-bordered">
+                                <tr>
+                                    <td>
+                                        <b>Date</b>
+                                    </td>
+
+                                    <td>
+                                        <b>Purchase Payment Details</b>
+                                    </td>
+
+
+                                    <td>
+                                        <b>Labour Payments</b>
+                                    </td>
+                                    <td>
+                                        <b>Total</b>
+                                    </td>
+
+                                    <!--                                    <td>-->
+                                    <!--                                        <b>Total</b>-->
+                                    <!--                                    </td>-->
+                                    <!--                                    <td>-->
+                                    <!--                                        <b>State</b>-->
+                                    <!--                                    </td>-->
+                                </tr>
+                                <t t-set="total_amounts" t-value="0"/>
+                                <t t-set="grant_total" t-value="0"/>
+                                <t t-foreach="o.get_labour_payment_products()" t-as="line">
+                                    <tr>
+                                        <td>
+                                            <span t-esc="line['date'][8:10] + '-' + line['date'][5:7] + '-' + line['date'][0:4]"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['total_amount2']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['total_amount']"/>
+                                        </td>
+                                        <t t-set="total_amounts" t-value="line['total_amount']+line['total_amount2']"/>
+                                        <t t-set="grant_total" t-value="grant_total+total_amounts"/>
+                                        <td>
+                                            <span t-esc="total_amounts"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td>
+
+                                    </td>
+                                    <td></td>
+                                    <td>
+                                        <span>TOTAL</span>
+                                    </td>
+                                    <td col="2">
+                                        <strong>
+                                            <span t-esc="grant_total"/>
+                                        </strong>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <report id="site_expense_report_print" string="Site Expense Report"
+                model="site.expense" report_type="qweb-pdf"
+                name="hiworth_construction.report_site_expense_details_template_view"/>
+        <report id="view_site_expense_details_report_print" string="Site Expense Report"
+                model="site.expense" report_type="qweb-pdf"
+                name="hiworth_construction.report_site_expense_details_template_view"/>
+
+
+        <record id="action_site_expense_wizard_form" model="ir.actions.act_window">
+            <field name="name">Site expense Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">site.expense</field>
+            <field name="target">new</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_site_expense_wizard_form"/>
+        </record>
+<!--        <menuitem-->
+<!--                id="menu_site_expense_report"-->
+<!--                action="action_site_expense_wizard_form"-->
+<!--                name="Site Expense Report"-->
+<!--                parent="hiworth_project_management.menu_work_report"-->
+<!--                sequence="6"/>-->
+        <menuitem name="Site Expense"
+                  id="site_expense"
+                  action="action_site_expense_wizard_form"
+                  sequence="100"/>
+    </data>
+</openerp>

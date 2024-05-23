@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+
+		<record id="form_project_added_work_schedule" model="ir.ui.view">
+			<field name="name">project.project.form.schedule</field>
+			<field name="model">project.project</field>
+			<field name="inherit_id" ref="edit_project_changed" />
+			<field name="arch" type="xml">
+				<xpath expr="//notebook/page[@string='Payment Schedule']"
+					position="after">
+					<page string="Work Schedules">
+						<field name="schedule_ids">
+							<tree>
+								<field name="name" />
+							</tree>
+							<form string="Work Schedule">
+								<group>
+									<field name="name" required="True" />
+								</group>
+								<group string="Schedule Lines">
+									<field name="schedule_line" nolabel="1">
+										<tree editable="bottom">
+											<field name="sequence" widget="handle" />
+											<field name="name"/>
+											<field name="start_date" />
+											<field name="end_date" />
+											<field name="status" />
+											<field name="remarks" />
+
+										</tree>
+									</field>
+								</group>
+							</form>
+						</field>
+					</page>
+
+					<page string="Quality Control">
+						<field name="quality_ids">
+							<tree editable="bottom">
+								<field name="name"/>
+								<field name="checked" />
+							</tree>
+						</field>						
+					</page>	
+
+				</xpath>
+			</field>
+		</record>
+
+
+	<!-- work schedule tree -->
+	<record id="view_work_schedule_tree_new" model="ir.ui.view">
+        <field name="name">work.schedule.tree</field>
+        <field name="model">work.schedule</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/> 
+                <field name="project_id"/> 
+            </tree>
+        </field>
+    </record>
+
+	<!-- work schedule form -->
+	<record id="form_work_schedule_view" model="ir.ui.view">
+		<field name="name">work.schedule.form</field>
+		<field name="model">work.schedule</field>
+		<field name="arch" type="xml">
+			<form string="Work Schedule">
+				<header>
+                    <button name="button_template" type="object" class="oe_highlight" string="Create Template" attrs="{'invisible':[('is_template','=', True)]}"/>
+				</header>
+				<group>
+					<group>
+						<field name="template_id"/>
+						<field name="is_template" invisible="1"/>
+						<field name="name" required="True"/>
+						<field name="project_id" string="Project"/>						
+					</group>
+					<group>
+					</group>
+				</group>				
+				<notebook>
+					<page string="Schedule Lines">
+						<field name="schedule_line" nolabel="1">
+							<tree editable="bottom">
+								<field name="sequence" widget="handle" />
+								<field name="name"/>
+								<field name="start_date" />
+								<field name="end_date" />
+								<field name="status" />
+								<field name="remarks" />
+							</tree>
+						</field>
+					</page>
+				</notebook>
+			</form>
+		</field>
+	</record>
+
+	<!-- work schedule action -->
+	<record id="action_work_schedule_view_new" model="ir.actions.act_window">
+		<field name="name">Work Schedule</field>
+		<field name="res_model">work.schedule</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_work_schedule_tree_new"/>		
+	</record>
+
+
+	<menuitem 
+			id="menu_work_schedule_project_view" 
+			name="Work Schedule"  
+			action="action_work_schedule_view_new" 
+			parent="project.menu_project_management" 
+			sequence="8" 
+			/>
+
+	<!-- for template -->
+	<record id="action_work_schedule_view_template" model="ir.actions.act_window">
+		<field name="name">Work Schedule</field>
+		<field name="res_model">work.schedule</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[('is_template','=',True)]</field>
+        <field name="view_id" ref="view_work_schedule_tree_new"/>		
+	</record>
+
+	<menuitem 
+			id="menu_work_schedule_view_template" 
+			name="Work Schedule"  
+			action="action_work_schedule_view_template" 
+			parent="main_menu_template_view_operation"
+			sequence="5" 
+			/>
+
+	</data>
+</openerp>

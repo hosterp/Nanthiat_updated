@@ -1,0 +1,174 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+    <template id="external_layout_header_inherit_purchase_order">
+        <div class="header">
+            <div class="row">
+                <div class="col-xs-12 text-center" >
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 80px;"/>
+                </div>
+            <!-- <div class="col-xs-9 text-left" style="font-size: 25px;margin-top:30px;" t-field="company.rml_header1"/> -->
+            <!-- <div class="col-xs-9 text-center" style="font-size: 25px;margin-top:30px;">
+                <div>Nanthiat Builders</div>
+            </div> -->
+
+            </div>
+                <div class="col-xs-12 text-center" style="font-size: 20px;margin-top:10px;"> 
+                    <div style="border-style:solid;"><b>Purchase Order</b></div>
+                </div>
+                <div class="row zero_min_height">
+                    <div class="col-xs-12" align='center'>
+                        <div  style="width:18%;border-bottom: 1px solid black;"></div>
+                    </div>
+                </div>
+       
+        </div>
+    </template>
+
+    <template id="external_layout_inherit_purchase_order">
+
+            <t t-if="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id"></t>
+            </t>
+
+            <t t-if="not o or not 'company_id' in o">
+                <t t-set="company" t-value="res_company"></t>
+            </t>
+
+        <t t-call="hiworth_construction.external_layout_header_inherit_purchase_order" />
+        <t t-raw="0" />
+    </template>
+
+    <template id="purchase.report_purchaseorder_document">
+            <t t-call="report.html_container">
+                <t t-call="hiworth_construction.external_layout_inherit_purchase_order">
+                    <div class="page">
+                        <t t-foreach="docs" t-as="o">
+                            <table class="table table-bordered" style="width:100%">
+                                <tr class="info">
+                                    <td style="width:50%">
+                                        <b>Suppliers       :</b>   <span t-field="o.partner_id.name"/>
+                                    </td>
+                                    <td style="width:50%">
+                                        <b>OrderDate       :</b>   <span t-field="o.date_order"/>
+                                    </td>
+                                </tr>
+                                <tr class="info">
+                                    <td>
+                                        <b>Account         :</b>   <span t-field="o.account_id.name"/>
+                                    </td>
+                                    <td>
+                                       <b> Min Expected Date:</b>  <span t-field="o.minimum_planned_date"/>
+                                    </td>
+                                </tr>
+                                <tr class="info"> 
+                                    <td>
+                                        <b>Invoice No      : </b>  <span t-field="o.partner_ref"/>
+                                    </td>
+                                    <td>
+                                        <b>Max Expected Date: </b>  <span t-field="o.maximum_planned_date"/>
+                                    </td>
+                                </tr>
+                                <tr class="info">
+                                    <td>
+                                       <b>Invoice Date     : </b>  <span t-field="o.invoice_date"/>
+                                    </td>
+                                    <td>
+                                        <b>Deliver To       : </b>  <span t-field="o.picking_type_id.name"/>
+                                    </td>
+                                </tr>
+                                <tr class="info">
+                                    <td>
+                                        <b>Project          : </b>  <span t-field="o.project_id.name"/>
+                                    </td>
+                                    <td>
+                                        <b>Destination      : </b>  <span t-field="o.location_id.name"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table class="table table-bordered" style="width:100%">
+                                <tr class="info">
+                                    <td><b>Product</b></td>
+                                    <td><b>Description</b></td>
+                                    <td><b>Required Quantity</b></td>
+                                    <td><b>UOM</b></td>
+                                    <td><b>Expected Rate</b></td>
+                                    <td><b>Recieved Quantity</b></td>
+                                    <td><b>Recieved Rate</b></td>
+                                    <td><b>Taxes</b></td>
+                                    <td><b>Subtotal</b></td>
+                                    <td><b>Tax Amount</b></td>
+                                    <td><b>Total</b></td>
+                                </tr>
+                                <t t-foreach ="o.order_line" t-as ="line">
+                                    <tr class="info">
+                                        <td><span t-esc="line.product_id.name"/></td>
+                                        <td><span t-esc="line.name"/></td>
+                                        <td><span t-esc="line.required_qty"/></td>
+                                        <td><span t-esc="line.product_uom.name"/></td>
+                                        <td><span t-esc="line.expected_rate"/></td>
+                                        <td><span t-esc="line.product_qty"/></td>
+                                        <td><span t-esc="line.price_unit"/></td>
+                                        <td></td>
+                                        <td><span t-esc="line.price_subtotal"/></td>
+                                        <td><span t-esc="line.tax_amount"/></td>
+                                        <td><span t-esc="line.total"/></td>
+                                    </tr>
+                                </t>
+                            </table>
+                            <table class="table table-bordered" style="width:30%" align="right">
+                                <tr class="info">
+                                    <td><b>Untaxed Amount </b></td>
+                                    <td><span t-field="o.amount_untaxed"/></td>
+                                </tr>
+                                <tr class="info">
+                                    <td><b>SGST Amount </b></td>
+                                    <td><span t-field="o.sgst_tax"/></td>
+                                </tr>
+                                <tr class="info">
+                                    <td><b>CGST Amount </b></td>
+                                    <td><span t-field="o.cgst_tax"/></td>
+                                </tr>
+                                <tr class="info">
+                                    <td><b>Discount Amount </b></td>
+                                    <td><span t-field="o.discount_amount"/></td>
+                                </tr>
+                                <tr class="info">
+                                    <td><b>Round Off Amount </b></td>
+                                    <td><span t-field="o.round_off_amount"/></td>
+                                </tr>
+                                <tr class="info">
+                                    <td><b>Total </b></td>
+                                    <td><span t-field="o.amount_total"/></td>
+                                </tr>
+                            </table>
+
+
+
+
+
+                        </t>
+                    </div>
+                </t>
+            </t>
+    </template>
+
+    <report
+                string="Purchase Order Print"
+                id="purchase.action_report_purchase_order"
+                model="purchase.order"
+                report_type="qweb-pdf"
+                name="purchase.report_purchaseorder_document"
+                file="purchase.report_purchaseorder_document"
+        />
+    <report
+                string="Purchase Order view"
+                id="purchase.action_report_purchase_order_view"
+                model="purchase.order"
+                report_type="qweb-html"
+                name="purchase.report_purchaseorder_document"
+                file="purchase.report_purchaseorder_document"
+        />
+ </data>
+</openerp>

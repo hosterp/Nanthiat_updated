@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		
+
+
+
+
+
+		<record id="view_project_message_sent_trees12" model="ir.ui.view">
+			<field name="name">messaging.tree5</field>
+			<field name="model">im_chat.message.new</field>
+			<field name="arch" type="xml">
+				<tree create="false">
+					<field name="from_id" string="FROM"/>
+					<field name="to_id" string="TO"/>
+					<field name="message" string="Message."/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_project_message_sent_form55" model="ir.ui.view">
+			<field name="name">messaging.form3</field>
+			<field name="model">im_chat.message.new</field>
+			<field name="arch" type="xml">
+				<form create="false" edit="false" delete="false">
+					<sheet>
+						<h1><center>SENT MESSAGE</center></h1>
+					<group>
+					<field name="from_id" string="FROM"/>
+					<field name="to_id" string="TO"/>
+					<field name="message" string="MESSAGE"/>
+					<field name="user_id" invisible="1"/>
+				</group>
+			</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="action_project_inherit_messaging_sent13">
+			<field name="name">Messages-Sent</field>
+			<field name="res_model">im_chat.message.new</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<!-- <field name="domain">[('from_id','=',uid)]</field> -->
+		</record>
+
+		<record id="action_project_messaging_tree_view25" model="ir.actions.act_window.view">
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="view_project_message_sent_trees12" />
+			<field name="act_window_id" ref="action_project_inherit_messaging_sent13" />
+		</record>
+
+		<record id="action_job_assignment_form_view24" model="ir.actions.act_window.view">
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="view_project_message_sent_form55" />
+			<field name="act_window_id" ref="action_project_inherit_messaging_sent13" />
+		</record>
+
+
+		<!-- <menuitem name="Sent Messages" id="menu_messaging_sub_sub_sub_project" parent="menu_messaging_sub_project" action="action_project_inherit_messaging_sent13" /> -->
+
+
+
+
+
+		<record id="view_project_message_delete_tree" model="ir.ui.view">
+			<field name="name">messaging.tree44</field>
+			<field name="model">im_chat.message.delete</field>
+			<field name="arch" type="xml">
+				<tree create="false">
+					<field name="from_id" string="FROM"/>
+					<field name="to_id" string="TO"/>
+					<field name="message" string="Message."/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_project_message_delete_form" model="ir.ui.view">
+			<field name="name">messaging.form4</field>
+			<field name="model">im_chat.message.delete</field>
+			<field name="arch" type="xml">
+				<form create="false" edit="false">
+					<header>
+						<button name="back_to_inbox" string="Back To Inbox" class="oe_highlight" type="object"/>
+						<field name="state" widget="statusbar" nolabel="1" invisible="1"/>
+					</header>
+					<sheet>
+						<h1><center>DELETED MESSAGE</center></h1>
+					<group>
+					<field name="from_id" string="FROM"/>
+					<field name="to_id" string="TO"/>
+					<field name="message" string="MESSAGE"/>
+					<field name="user_id" invisible="1"/>
+				</group>
+			</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="action_project_inherit_messaging_delete">
+			<field name="name">Messages-Delete</field>
+			<field name="res_model">im_chat.message.delete</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[('to_id','=',uid)]</field>
+		</record>
+
+		<record id="action_project_messaging_delete_tree_view" model="ir.actions.act_window.view">
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="view_project_message_delete_tree" />
+			<field name="act_window_id" ref="action_project_inherit_messaging_delete" />
+		</record>
+
+		<record id="action_job_assignment_delete_form_view" model="ir.actions.act_window.view">
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="view_project_message_delete_form" />
+			<field name="act_window_id" ref="action_project_inherit_messaging_delete" />
+		</record>
+
+
+		<!-- <menuitem name="Trash" id="menu_messaging_sub_sub_sub_sub_project" parent="menu_messaging_sub_project" action="action_project_inherit_messaging_delete" groups="hiworth_project_management.group_user"/> -->
+
+
+
+
+		<record id="view_project_message_rquirement_tree" model="ir.ui.view">
+			<field name="name">messaging.tree444</field>
+			<field name="model">im_chat.message.req</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="from_id" string="FROM"/>
+					<field name="to_id" string="TO"/>
+					<field name="message" string="Message."/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_project_message_requirement_form" model="ir.ui.view">
+			<field name="name">messaging.form44</field>
+			<field name="model">im_chat.message.req</field>
+			<field name="arch" type="xml">
+				<form>
+					<header>
+						<!-- <button name="reply_message" string="Reply" class="oe_highlight" type="object" groups="hiworth_project_management.group_manager" attrs="{'invisible':[('state','=','pending')]}"/> -->
+						<button name="approved_message" type="object" string="Approve" class="oe_highlight" groups="base.group_erp_manager" attrs="{'invisible':[('state','=','approved')]}"/>
+						<field name="state" widget="statusbar" nolabel="1" invisible="0"/>
+					</header>
+					<sheet>
+						<h1><center><i>MESSAGE</i></center></h1>
+					<group>
+					<field name="from_id" string="FROM"/>
+					<field name="to_id" string="TO"/>
+					<field name="message" string="MESSAGE"/>
+					<field name="bool_msg" invisible="1"/>
+					<field name="reply" group="base.group_erp_manager"/>
+					<field name="user_id" invisible="1"/>
+				</group>
+			</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="action_project_inherit_messaging_requirement">
+			<field name="name">Messages-Requirement</field>
+			<field name="res_model">im_chat.message.req</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[('to_id','=',uid)]</field>
+		</record>
+
+		<record id="action_project_messaging_requirement_tree_view" model="ir.actions.act_window.view">
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="view_project_message_rquirement_tree" />
+			<field name="act_window_id" ref="action_project_inherit_messaging_requirement" />
+		</record>
+
+		<record id="action_job_assignment_requirement_form_view" model="ir.actions.act_window.view">
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="view_project_message_requirement_form" />
+			<field name="act_window_id" ref="action_project_inherit_messaging_requirement" />
+		</record>
+
+		<record model="ir.actions.act_window" id="action_project_inherit_messaging_requirement_pending">
+			<field name="name">Messages-Requirement</field>
+			<field name="res_model">im_chat.message.req</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[('state','=','pending')]</field>
+
+		</record>
+
+		<record id="action_project_messaging_requirement_tree11_view" model="ir.actions.act_window.view">
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="view_project_message_rquirement_tree" />
+			<field name="act_window_id" ref="action_project_inherit_messaging_requirement_pending" />
+		</record>
+
+		<record id="action_job_assignment_requirement_form11_view" model="ir.actions.act_window.view">
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="view_project_message_requirement_form" />
+			<field name="act_window_id" ref="action_project_inherit_messaging_requirement_pending" />
+		</record>
+
+
+
+		<record id="view_sent_message_tree_is" model="ir.ui.view">
+			<field name="name">im_chat-tree</field>
+			<field name="model">im_chat.message.req</field>
+			<field name="arch" type="xml">
+				<tree edit="false" create="false">
+					<field name="from_id" string="FROM"/>
+					<field name="to_id" string="TO"/>
+					<field name="message" string="Message."/>
+				</tree>
+			</field>
+		</record>
+
+
+		
+
+		<record id="view_snt_msg_is_form" model="ir.ui.view">
+			<field name="name">im_chat-form</field>
+			<field name="model">im_chat.message.req</field>
+			<field name="arch" type="xml">
+				<form string="Sent" edit="false" create="false">
+					<header>
+						<button name="reply_message" string="Reply" class="oe_highlight" type="object" groups="hiworth_project_management.group_manager" attrs="{'invisible':[('state','=','approved')]}"/>
+						<field name="state" widget="statusbar"/>
+					</header>
+					<sheet>
+						<h1><center><i>MESSAGE</i></center></h1>
+					<group>
+					<field name="from_id" string="FROM"/>
+					<field name="to_id" string="TO"/>
+					<field name="message" string="MESSAGE"/>
+					<field name="bool_msg" invisible="1"/>
+					<field name="user_id" invisible="1"/>
+					<field name="reply" groups="hiworth_project_management.group_manager"/>
+				</group>
+			</sheet>
+						
+					
+				</form>
+			</field>
+		</record>
+
+
+
+
+		<record model="ir.actions.act_window" id="action_project_inherit_sent_messages333">
+			<field name="name">Sent Messages</field>
+			<field name="res_model">im_chat.message.req</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[('from_id','=',uid)]</field>
+		</record>
+
+		<record id="action_sent_messagesw_tree_view" model="ir.actions.act_window.view">
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="view_sent_message_tree_is" />
+			<field name="act_window_id" ref="action_project_inherit_sent_messages333" />
+		</record>
+
+		<record id="action_swnt_messagesd_form_view" model="ir.actions.act_window.view">
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="view_snt_msg_is_form" />
+			<field name="act_window_id" ref="action_project_inherit_sent_messages333" />
+		</record>
+
+
+		<record model="ir.actions.act_window" id="action_project_inherit_sent_messages3333">
+			<field name="name">Messages</field>
+			<field name="res_model">im_chat.message.req</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[('to_id','=',uid)]</field>
+		</record>
+
+		<record id="action_sent_messagesw_tree3_view" model="ir.actions.act_window.view">
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="view_sent_message_tree_is" />
+			<field name="act_window_id" ref="action_project_inherit_sent_messages3333" />
+		</record>
+
+		<record id="action_swnt_messagesd_form3_view" model="ir.actions.act_window.view">
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="view_snt_msg_is_form" />
+			<field name="act_window_id" ref="action_project_inherit_sent_messages3333" />
+		</record>
+		
+
+
+		<menuitem name="Requirement Messages" id="menu_messaging_sub_requirement_project" parent="menu_messaging_project"/>
+
+		<menuitem name="Messages" id="menu_messaging_sub_sub_requirement_project" parent="menu_messaging_sub_requirement_project" action="action_project_inherit_sent_messages3333" groups="hiworth_project_management.group_manager,hiworth_project_management.group_user" sequence="1"/>
+		<!-- action="action_project_inherit_messaging_requirement" -->
+
+		<menuitem name="Sent Messages" id="menu_messaging_sent_requirement_project" parent="menu_messaging_sub_requirement_project" action="action_project_inherit_sent_messages333" groups="hiworth_project_management.group_user,hiworth_project_management.group_manager"/>
+
+		
+
+		<menuitem name="Replies" id="menu_messaging_sent_requirement_project_employee_repliees" parent="menu_messaging_sub_requirement_project" action="action_project_inherit_messaging_requirement" groups="hiworth_project_management.group_user" sequence="2"/>
+
+
+
+	</data>
+</openerp>

@@ -1,0 +1,17 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_inventery_valuation_quatation,inventery_valuation_quatation,stock_account.model_stock_history,tms_quatation,1,1,0,0
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+access_stock_move_vehiclemanage,stock_move_vehiclemanage,stock.model_stock_move,tms_fleet_vehicle,1,1,0,0
+access_puc_lines_vehiclemanage,puc_lines_vehiclemanage,model_puc_lines,tms_fleet_vehicle,1,1,1,1
+access_bank_emi_lines_vehiclemanage3,bank_emi_lines_vehiclemanage3,model_bank_emi_lines,tms_fleet_vehicle,1,1,1,1
+access_agent_inslines_vehiclemanage,agent_ins_lines_vehiclemanage,model_agent_ins_lines,tms_fleet_vehicle,1,1,1,1
+access_stock_location_vehiclemanage,stock_location_vehiclemanage,stock.model_stock_location,tms_fleet_vehicle,1,1,0,0

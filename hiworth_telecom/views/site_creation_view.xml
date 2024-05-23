@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		<menuitem 
+				id="main_menu_telecom_root" 
+				name="Telecom"
+				sequence="90"
+				/>
+
+		<menuitem 
+				id="main_menu_telecom_sub"
+				name="Telecom"
+				parent="main_menu_telecom_root"
+				sequence="1" />
+
+	
+		<!-- Site Creation-->
+		<record id="site_creation_tree" model="ir.ui.view">
+			<field name="name">site.creation.tree</field>
+			<field name="model">master.data</field>
+			<field name="arch" type="xml">
+				<tree string="Site Creation">
+					<field name="allotment_type"/>											
+					<field name="project_id"/>
+					<field name="indus_id"/>
+					<field name="site_name"/>
+				</tree>
+			</field>
+		</record>
+
+
+		<record id="site_creation_form" model="ir.ui.view">
+			<field name="name">site.creation.form</field>
+			<field name="model">master.data</field>
+			<field name="arch" type="xml">
+				<form string="Site Creation">	
+				<header>
+                    <button name="button_ongoing" type="object" class="oe_highlight" states="draft" string="Start Project"/>
+					<button name="button_close" type="object" class="oe_highlight" states="ongoing" string="Close Project"/>
+					<field name="state" widget="statusbar" statusbar_visible="draft,ongoing,close"/>
+				</header>			
+				<sheet>					
+					<group>
+						<group>
+							<field name="allotment_type"/>									
+							<field name="project_id"/>										
+							<field name="indus_id"/>										
+							<field name="site_name"/>										
+							<field name="electrical_po"/>									
+							<field name="civil_po"/>										
+							<field name="fse"/>
+							<field name="site_tech_name"/>									
+							<field name="contact_number"/>									
+							<field name="lat"/>												
+							<field name="log"/>												
+							<field name="work_type"/>										
+							<field name="requested_opco"/>									
+							<field name="anchor_opco"/>										
+						</group>
+						<group>
+							<field name="district"/>										
+							<field name="work_allotted_date" required="1"/>							
+							<field name="dg"/>												
+							<field name="stabilizer"/>										
+							<field name="sps_amf_piu_sp"/>									
+							<field name="battery_bank"/>									
+							<field name="bb_cabinet"/>
+							<field name="smps"/>										
+							<field name="modules"/>										
+							<field name="aircon"/>										
+							<field name="dc_converter"/>									
+							<field name="txn_rack"/>										
+							<field name="dcem"/>										
+							<field name="od_plinth"/>				
+						</group>
+					</group>
+				</sheet>
+				</form>
+			</field>
+		</record>
+
+
+		<record id="action_site_creation_nw" model="ir.actions.act_window">
+			<field name="name">Site Creation</field>
+			<field name="res_model">master.data</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[]</field>
+			<field name="view_ids"
+				   eval="[(5, 0, 0),
+                          (0, 0, {'view_mode': 'tree', 'view_id': ref('site_creation_tree')}),
+                          (0, 0, {'view_mode': 'form', 'view_id': ref('site_creation_form')})]"/>
+		</record>
+
+
+		<menuitem 
+				id="menu_site_creation" 
+				name="Site Creation" 
+				parent="main_menu_telecom_sub"
+				action="action_site_creation_nw"
+				sequence="1" />
+
+
+	</data>
+</openerp>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>	
+
+		<!-- Billing  -->
+		<record id="telecom_billing_tree" model="ir.ui.view">
+			<field name="name">telecom.billing.tree</field>
+			<field name="model">telecom.billing</field>
+			<field name="arch" type="xml">
+				<tree string="Billing">
+					<field name="allotment_type"/>	
+					<field name="project_id"/>	
+					<field name="indus_id"/>	
+					<field name="site_name"/>	
+					<field name="m_sheet_status"/>	
+					<field name="aging"/>					
+				</tree>
+			</field>
+		</record>
+
+
+		<record id="telecom_billing_form_123" model="ir.ui.view">
+			<field name="name">telecom.billing.form</field>
+			<field name="model">telecom.billing</field>
+			<field name="arch" type="xml">
+				<form string="Billing">			
+				<sheet>					
+					<group>
+						<group>
+							<field name="allotment_type"/>	
+							<field name="project_id" required="1"/>	
+							<field name="indus_id"/>	
+							<field name="site_name"/>	
+							<field name="m_sheet_status"/>	
+							<field name="aging"/>	
+							<field name="subcontractor_bill_amt"/>	
+							<field name="pr_value_electrical"/>	
+							<field name="pr_value_civil"/>	
+							<field name="qty_amendment_electrical"/>	
+							<field name="qty_amendment_civil"/>								
+						</group>
+						<group>
+							<field name="line_addition_electrical"/>	
+							<field name="line_addition_civil"/>	
+							<field name="wcc_status_electrical"/>	
+							<field name="wcc_status_civil"/>	
+							<field name="invoice_sts_electrical"/>	
+							<field name="invoice_sts_civil"/>	
+							<field name="inv_amt_electrical"/>	
+							<field name="inv_amt_civil"/>	
+							<field name="payment_sts_electrical"/>	
+							<field name="payment_sts_civil"/>	
+							<field name="total_receive_amt"/>								
+						</group>
+					</group>
+				</sheet>
+				</form>
+			</field>
+		</record>
+
+
+		<record id="action_telecom_billing_nw" model="ir.actions.act_window">
+			<field name="name">Telecom Billing</field>
+			<field name="res_model">telecom.billing</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[]</field>
+			<field name="view_id" ref="telecom_billing_tree"/>
+		</record>
+
+
+		<menuitem 
+				id="telecom_billing_menu" 
+				name="Billing" 
+				parent="main_menu_telecom_sub"
+				action="action_telecom_billing_nw"
+				sequence="5" />
+      
+	</data>
+</openerp>

@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+		<record id="form_purchase_report_wizard" model="ir.ui.view">
+			<field name="name">Purchase Report</field>
+			<field name="model">purchase.report.wizard</field>
+			<field name="arch" type="xml">
+				<form>
+					<group>
+						<group>
+							<field name="from_date" />
+						</group>
+						<group>
+							<field name="to_date" />
+						</group>
+						<group>
+							<field name ="category_id"/>
+						</group>
+						<group>
+							<field name ="project_id"/>
+						</group>
+					</group>
+					<footer>
+						<button type="object" name="view_purchase_report"
+							string="View" class="oe_highlight" />
+						<button type="object" name="print_purchase_report"
+							string="Print" class="oe_highlight" />
+						<button special="cancel" string="Cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+		<record id="action_purchase_report_wizard" model="ir.actions.act_window">
+			<field name="name">Purchase Report</field>
+			<field name="res_model">purchase.report.wizard</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+
+		<menuitem
+				id="menu_purchase_report_nanthiat"
+				parent="hiworth_project_management.menu_work_report"
+				action="action_purchase_report_wizard"
+				name="Purchase Report"
+				sequence="2"
+				/>
+
+		<report id="purchase_report_print" string="Purchase Report"
+		model="purchase.report.wizard" report_type="qweb-pdf"
+		name="hiworth_construction.report_purchase_template_view" />
+
+		<report id="purchase_report_view" string="Purchase Report"
+		model="purchase.report.wizard" report_type="qweb-html"
+		name="hiworth_construction.report_purchase_template_view" />
+
+		<template id="report_purchase_template_view">
+			<t t-call="report.html_container">
+				<t t-call="report.external_layout">
+					<div class="page">
+						<t t-foreach="docs" t-as="o">
+							<div class = 'col-xs 12' style="font-size:20px">
+								<center>
+								<p>Purchase Report</p>
+								</center>
+							</div>
+							<table class="table table-bordered">
+								<tr><td colspan="3"><center><b>Project : <span t-field="o.project_id.name"/></b></center></td>
+								</tr>
+								<tr>
+									<td>Date From : <span t-field="o.from_date"/></td>
+									<td>Date To : <span t-field="o.to_date"/></td>
+									<td>Category :<span t-field="o.category_id.name"/></td>
+
+								</tr>
+							</table>
+							<table class="table table-bordered">
+								<tr>
+									<td><b>Product</b></td>
+									<td><b>Supplier</b></td>
+									<td><b>Total</b></td>
+								</tr>
+							<t t-set="total_amount" t-value="0" />
+							<t t-foreach="o.get_purchase_products()" t-as="line">
+								<tr>
+									<td><span t-esc="line.get('product_id')"/></td>
+									<td><span t-esc="line.get('supplier_id')"/></td>
+									<td><span t-esc="line.get('total')"/></td>
+									<t t-set="total_amount" t-value="total_amount+line.get('total')"  />
+								</tr>
+									
+							</t>
+						 <tr >
+								<td colspan ="3" align="right"><b> Total : </b><span t-esc="total_amount"/></td>
+								</tr> 
+						</table>
+
+						</t>
+					</div>
+				</t>
+			</t>
+		</template>
+						
+
+	</data>
+</openerp>
+

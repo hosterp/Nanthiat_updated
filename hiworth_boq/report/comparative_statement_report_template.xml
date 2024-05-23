@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="report_comparative_statement">
+    <t t-call="report.html_container">
+		<t t-foreach="docs" t-as="o">
+			<t t-call="report.external_layout">
+				<div class="page">
+					<center><b><h2>Comparative Statement</h2></b></center>
+					<table class="table table-bordered"  style="width: 100%">
+						<thead>
+							<tr>
+								<td colspan="17"><center><span t-field="o.tender_inviting_authority"/></center></td>
+							</tr>
+							<tr>
+								<td colspan="17"><center>Package No: KR -11-48   Name of work:-  <span t-field="o.name_of_work"/>, Block : <span t-field="o.block_id.name"/>, Panchayath : <span t-field="o.panchayath_id.name"/>,  District : <span t-field="o.district_id.name"/></center></td>
+							</tr>
+							<tr>
+								<td colspan="17"><center>COMPARATIVE STATEMENT</center></td> 
+							</tr>
+							<tr></tr>
+							<tr></tr>
+							<tr>
+								<td rowspan="4">Sl No.</td>
+								<td rowspan="4">Description</td>
+								<td colspan="3"><center>Original Estimate</center></td>
+								<td colspan="7"><center>Revised Estimate</center></td>
+								<td rowspan="4">Savings(Minus) in Rs</td>
+								<td rowspan="4">Excess(Plus) in Rs</td>
+								<td rowspan="4">Explanation</td>
+								<td rowspan="4">Remarks of KSRRDA</td>
+								<td rowspan="4">Remarks of SE</td>
+							</tr>
+							<tr>
+								<td rowspan="3">Quantity</td>
+								<td rowspan="3">Rate(Rs/Ps)</td>
+								<td rowspan="3">Amount(Rs)</td>
+								<td rowspan="2" colspan="3"><center>Quantity</center></td>
+								<td rowspan="3">Rate</td>								
+								<td colspan="3" rowspan="2"><center>Amount of Work</center></td>
+							</tr>
+							<tr>
+								<td>Already Executed</td>
+								<td>To be Executed</td>
+								<td>Total</td>
+								<td>Already Executed</td>
+								<td>To be Executed</td>
+								<td>Total</td>
+							</tr>	
+						</thead>
+						<tbody>
+							<!-- <t t-set="i" t-value="1" />	 -->
+							<t t-foreach="o.line_ids" t-as="line">
+								<tr>
+									<!-- <td><span t-esc="i"/>
+									<t t-set="i" t-value="i+1"/>
+									</td> -->
+									<td><span t-field="line.sl_no"/></td>
+									<td><span t-field="line.product_id.name"/></td>	
+									<td><span t-esc="'{0:,.3f}'.format(line.quantity)"/></td>
+									<td><span t-esc="'{0:,.2f}'.format(line.estimated_rate)"/></td>
+									<td><span t-esc="'{0:,.2f}'.format(line.untaxed_amt)"/></td>		
+									<td><span t-esc="'{0:,.3f}'.format(line.already_executed_qty)"/></td>	
+									<td><span t-esc="'{0:,.3f}'.format(line.to_be_executed_qty)"/></td>		
+									<td><span t-esc="'{0:,.3f}'.format(line.total_quantity)"/></td>		
+									<td><span t-esc="'{0:,.2f}'.format(line.revised_rate)"/></td>
+									<td><span t-esc="'{0:,.2f}'.format(line.already_executed_revised)"/></td>
+									<td><span t-esc="'{0:,.2f}'.format(line.to_be_executed_revised)"/></td>	
+									<td><span t-esc="'{0:,.2f}'.format(line.revised_total)"/></td>			
+									<td><span t-esc="'{0:,.2f}'.format(line.savings)"/></td>		
+									<td><span t-esc="'{0:,.2f}'.format(line.excess)"/></td>			
+									<td><span t-field="line.explanation"/></td>
+									<td><span t-field="line.remarks_ksrrda"/></td>			
+									<td><span t-field="line.remarks_se"/></td>				
+								</tr>
+							</t>
+
+							<!-- Extra Items -->
+							<tr style="background-color: #514848;">
+								<td></td>							
+								<td><strong>Extra Items</strong></td>	
+								<td></td>
+								<td></td>
+								<td></td>		
+								<td></td>	
+								<td></td>		
+								<td></td>		
+								<td></td>
+								<td></td>
+								<td></td>	
+								<td></td>			
+								<td></td>		
+								<td></td>			
+								<td></td>
+								<td></td>			
+								<td></td>									
+							</tr>
+
+							<!-- <t t-set="x" t-value="1" />						 -->
+							<t t-foreach="o.extra_line_ids" t-as="line">
+								<tr>
+									<td><span t-field="line.sl_no"/></td>							
+									<td><span t-field="line.product_id.name"/></td>	
+									<td><span t-esc="'{0:,.3f}'.format(line.quantity)"/></td>
+									<td><span t-esc="'{0:,.2f}'.format(line.estimated_rate)"/></td>
+									<td><span t-esc="'{0:,.2f}'.format(line.untaxed_amt)"/></td>		
+									<td><span t-esc="'{0:,.3f}'.format(line.already_executed_qty)"/></td>	
+									<td><span t-esc="'{0:,.3f}'.format(line.to_be_executed_qty)"/></td>		
+									<td><span t-esc="'{0:,.3f}'.format(line.total_quantity)"/></td>		
+									<td><span t-esc="'{0:,.2f}'.format(line.revised_rate)"/></td>
+									<td><span t-esc="'{0:,.2f}'.format(line.already_executed_revised)"/></td>
+									<td><span t-esc="'{0:,.2f}'.format(line.to_be_executed_revised)"/></td>	
+									<td><span t-esc="'{0:,.2f}'.format(line.revised_total)"/></td>			
+									<td><span t-esc="'{0:,.2f}'.format(line.savings)"/></td>		
+									<td><span t-esc="'{0:,.2f}'.format(line.excess)"/></td>			
+									<td><span t-field="line.explanation"/></td>
+									<td><span t-field="line.remarks_ksrrda"/></td>			
+									<td><span t-field="line.remarks_se"/></td>									
+								</tr>
+							</t>
+
+						</tbody>					
+					</table>				
+	               
+				</div>
+			</t>
+		</t>
+	</t>
+</template>
+</data>
+</openerp>

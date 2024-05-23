@@ -1,0 +1,176 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+demo_user, Model User access,model_task_entry,hiworth_project_management.group_manager,1,1,1,0
+demo_emp, Model emp access,model_task_entry,hiworth_project_management.group_employee,1,1,0,0
+demo_user_site, Model User access Site,model_site_visit,hiworth_project_management.group_manager,1,1,1,0
+demo_emp_site, Model emp access Site,model_site_visit,hiworth_project_management.group_employee,1,1,1,0
+demo_user_site_schedule, Model User access Site schedule,model_site_visit_schedule,hiworth_project_management.group_manager,1,1,1,0
+demo_emp_site_schedule, Model emp access Site schedule,model_site_visit_schedule,hiworth_project_management.group_employee,1,1,0,0
+demo_user_project, Model User Project schedule,hiworth_construction.model_project_project,hiworth_project_management.group_user,1,0,0,0
+demo_user_project_modification, Model User Project modification,hiworth_construction.model_project_modification,hiworth_project_management.group_user,1,0,0,0
+demo_user_project_modification_manager, Model Manager Project modification,hiworth_construction.model_project_modification,hiworth_project_management.group_manager,1,1,1,0
+demo_user_project_category, Model User Project category,hiworth_construction.model_category_items_estimation,hiworth_project_management.group_user,1,0,0,0
+demo_manager_project_category, Model Manager Project category,hiworth_construction.model_category_items_estimation,hiworth_project_management.group_manager,1,1,1,0
+demo_user_project_work_schedule, Model User work schedule,hiworth_construction.model_work_schedule,hiworth_project_management.group_user,1,0,0,0
+demo_user_project_labour_report, Model User Project Labour Report,hiworth_construction.model_project_labour_report,hiworth_project_management.group_user,1,0,0,0
+demo_user_project_directory, Model User Project Directory,hiworth_construction.model_project_directory,hiworth_project_management.group_user,1,0,0,0
+demo_user_project_product, Model User Project Product,hiworth_construction.model_project_product,hiworth_project_management.group_user,1,0,0,0
+demo_user_project_schedulee, Model User Project Schedule22,hiworth_construction.model_project_schedule,hiworth_project_management.group_user,1,0,0,0
+demo_user_project_stages, Model User Project Stages,hiworth_construction.model_project_stages,hiworth_project_management.group_user,1,0,0,0
+demo_user_project_account_move_line, Model User Account Move Line,hiworth_construction.model_account_move_line,hiworth_project_management.group_user,1,0,0,0
+demo_user_messaging, Model Messaging,hiworth_project_management.model_im_chat_message_new,hiworth_project_management.group_user,1,1,1,1
+demo_emp_messaging, Model Messaging66,hiworth_project_management.model_im_chat_message_new,hiworth_project_management.group_employee,1,1,1,1
+demo_user_messaging1, Model Messaging1,hiworth_project_management.model_im_chat_message_new,hiworth_project_management.group_manager,1,1,1,1
+demo_user_messaging_delete, Model Messaging Delete,hiworth_project_management.model_im_chat_message_delete,hiworth_project_management.group_user,1,1,1,1
+
+demo_user_messaging2, Model Messaging2,hiworth_project_management.model_im_chat_message_req,hiworth_project_management.group_user,1,1,1,0
+demo_user_messaging3, Model Messaging3,hiworth_project_management.model_im_chat_message_req,hiworth_project_management.group_manager,1,1,1,0
+demo_empp_messaging3, Model Messaging543,hiworth_project_management.model_im_chat_message_req,hiworth_project_management.group_employee,1,1,1,1
+
+
+demo_manager_task_creation, Model Task Creation,hiworth_project_management.model_assigned_member,hiworth_project_management.group_manager,1,1,1,0
+
+demo_assigned_mmbr, Model Assig Mem,hiworth_project_management.model_assigned_member,hiworth_project_management.group_user,1,1,1,0
+
+
+demo_assigned_mmbr1, Model Assig Mem1,hiworth_project_management.model_assigned_member,hiworth_project_management.group_employee,1,1,1,0
+
+
+
+
+
+demo_hr_employee_manager, Model Hr Employee Manager,hr.model_hr_employee,hiworth_project_management.group_manager,1,1,0,0
+
+demo_hr_employee_employee, Model Hr Employee Employee,hr.model_hr_employee,hiworth_project_management.group_employee,1,1,0,0
+
+
+
+demo_job_summary_manager, Model Job Summary Manager,hiworth_project_management.model_job_summary,hiworth_project_management.group_manager,1,1,1,0
+
+demo_job_summary_employee, Model Job Summary Employee,hiworth_project_management.model_job_summary,hiworth_project_management.group_employee,1,1,0,0
+
+demo_equ_qualify, Model Equ Qualify,hiworth_hr_attendance.model_edu_qualify,hiworth_project_management.group_manager,1,0,0,0
+demo_equ_qualify_emp, Model Equ Qualify Emp,hiworth_hr_attendance.model_edu_qualify,hiworth_project_management.group_employee,1,0,0,0
+
+demo_hr_pyslip_manager, Model Hr Payslip Manager,hiworth_hr_attendance.model_hr_payslip,hiworth_project_management.group_manager,1,0,0,0
+
+demo_hr_pyslip_employee, Model Hr Payslip Employee,hiworth_hr_attendance.model_hr_payslip,hiworth_project_management.group_employee,1,0,0,0
+
+demo_children_details, Model Children Details,hiworth_project_management.model_children_details,hiworth_project_management.group_user,1,1,1,0
+
+
+
+
+demo_manager_project_work_schedule, Model Manager work schedule,hiworth_construction.model_work_schedule,hiworth_project_management.group_manager,1,1,1,0
+demo_manager_project_labour_report, Model Manager Project Labour Report,hiworth_construction.model_project_labour_report,hiworth_project_management.group_manager,1,1,1,0
+demo_manager_project_directory, Model manager Project Directory,hiworth_construction.model_project_directory,hiworth_project_management.group_manager,1,1,1,0
+demo_manager_project_product, Model manager Project Product,hiworth_construction.model_project_product,hiworth_project_management.group_manager,1,1,1,0
+demo_manager_project_schedulee, Model manager Project Schedule22,hiworth_construction.model_project_schedule,hiworth_project_management.group_manager,1,1,1,0
+demo_manager_project_stages, Model manager Project Stages,hiworth_construction.model_project_stages,hiworth_project_management.group_manager,1,1,1,0
+demo_manager_project_account_move11, Model manager Account Move12,account.model_account_move,hiworth_project_management.group_manager,1,1,1,0
+demo_manager_project_account_move_line, Model manager Account Move Line,hiworth_construction.model_account_move_line,hiworth_project_management.group_manager,1,1,1,0
+
+demo_employee_charge, Model Employee InCharge,model_employee_charge,hiworth_project_management.group_manager,1,1,1,0
+
+demo_project_task66,Model project Task0,hiworth_construction.model_project_task,hiworth_project_management.group_manager,1,1,1,0
+
+demo_project_task66090,Model project Task0210,hiworth_construction.model_project_task,hiworth_project_management.group_employee,1,1,0,0
+
+demo_project_task60,Model Employeee55,hiworth_construction.model_project_task_estimation,hiworth_project_management.group_employee,1,1,1,0
+
+demo_project_task_work60,Model Employeee Work55,project.model_project_task_work,hiworth_project_management.group_employee,1,1,1,0
+
+demo_project_task_type60,Model Employeee Type55,project.model_project_task_type,hiworth_project_management.group_employee,1,1,1,0
+
+demo_project_task2ww60,Model Manager4 Type55,model_task_message,hiworth_project_management.group_manager,1,1,1,0
+demo_project_task2ww6011,Model Manager14 Type55,model_task_message,hiworth_project_management.group_employee,1,1,1,0
+
+project_task_estimation012, Model Manager Task Estimation99,hiworth_construction.model_project_task_estimation,hiworth_project_management.group_manager,1,1,1,0
+
+project_product11, Model Project Product55,hiworth_construction.model_project_product,hiworth_project_management.group_employee,1,1,1,0
+
+project_project_453567, Model Project Project Employee,hiworth_construction.model_project_project,hiworth_project_management.group_employee,1,1,1,0
+
+project_stock_picking_453567, Model Stock Picking Employee,hiworth_construction.model_stock_picking,hiworth_project_management.group_employee,1,1,1,0
+
+project_stock_picking_4535678, Model Stock Picking Manager,hiworth_construction.model_stock_picking,hiworth_project_management.group_manager,1,1,1,0
+
+project_task_111, Model Project Task Create,hiworth_project_management.model_event_event,hiworth_project_management.group_manager,1,1,1,0
+
+project_task_222, Model Project Task Create Employee,hiworth_project_management.model_event_event,hiworth_project_management.group_employee,1,1,0,0
+
+project_task_onlyread_cust, Model Project Task onlyread customer,hiworth_project_management.model_event_event,hiworth_project_management.group_user,1,0,0,0
+
+project_job_assignment_522, Model Job Assignment333,hiworth_project_management.model_job_assignment,hiworth_project_management.group_employee,1,0,0,0
+
+project_job_assignment_manager_522, Model Job AssignmentManager333,hiworth_project_management.model_job_assignment,hiworth_project_management.group_manager,1,1,1,0
+
+project_job_summary_wizard_manager, Model Job Summary Wizard Manager,hiworth_project_management.model_job_summary_wizard,hiworth_project_management.group_manager,1,1,1,0
+
+project_job_summary_wizard_employee, Model Job Summary Wizard Employee,hiworth_project_management.model_job_summary_wizard,hiworth_project_management.group_employee,1,1,1,0
+
+
+project_event_type_522, Model Event Type3,event.model_event_type,hiworth_project_management.group_manager,1,1,1,0
+
+project_rivision_remark_522, Model Rivision Remark,hiworth_project_management.model_rivision_remark,hiworth_project_management.group_manager,1,1,1,0
+
+project_general_message_522, Model General Message,hiworth_project_management.model_general_message,hiworth_project_management.group_manager,1,1,1,0
+
+project_general_message_employee_522, Model General MessageE,hiworth_project_management.model_general_message,hiworth_project_management.group_employee,1,1,1,0
+
+project_general_message_user_522, Model General MessageU,hiworth_project_management.model_general_message,hiworth_project_management.group_user,1,1,1,0
+
+project_work_order_contractor_user_522, Model WorkOrder COntr,hiworth_construction.model_work_order,hiworth_project_management.group_contractor,1,0,0,0
+
+project_work_order_contractor_user_52, Model WorkOrder COntra,hiworth_construction.model_work_order_line,hiworth_project_management.group_contractor,1,0,0,0
+
+project_work_order_contractor_hiworth, Model WorkOrder COntrac,hiworth_construction.model_hiworth_invoice,hiworth_project_management.group_contractor,1,1,0,0
+
+
+
+demo_manager_wizard, Model manager Wizard,hiworth_project_management.model_task_mes,hiworth_project_management.group_manager,1,1,1,0
+demo_manager_project_wizard, Model manager Wizard11,hiworth_project_management.model_task_mes,hiworth_project_management.group_employee,1,1,1,0
+
+
+
+
+demo_manager_work_report, Model manager Work Report,hiworth_project_management.model_work_report,hiworth_project_management.group_manager,1,1,1,0
+demo_manager_my_work_report, Model manager My Work Report,hiworth_project_management.model_my_work_report,hiworth_project_management.group_manager,1,1,1,0
+demo_customer_work_report, Model customer Work Report,hiworth_project_management.model_work_report,hiworth_project_management.group_user,1,0,0,0
+
+demo_employee_work_report, Model Employee Work Report,hiworth_project_management.model_work_report,hiworth_project_management.group_employee,1,1,1,0
+demo_employee_my_work_report, Model Employee My Work Report,hiworth_project_management.model_my_work_report,hiworth_project_management.group_employee,1,1,1,0
+
+demo_res_users, Model Res Users,hiworth_project_management.model_res_users,hiworth_project_management.group_user,1,1,0,0
+
+demo_res_partner, Model Res Partner,hiworth_project_management.model_res_partner,hiworth_project_management.group_user,1,1,0,0
+
+demo_res_partner_manager, Model Res Partner Manager,hiworth_project_management.model_res_partner,hiworth_project_management.group_manager,1,1,1,0
+
+demo_branch_project_customer, Model Branch Project Customer,hiworth_hr_attendance.model_branch_project,hiworth_project_management.group_user,1,0,0,0
+demo_branch_project_manager, Model Branch Project Manager,hiworth_hr_attendance.model_branch_project,hiworth_project_management.group_manager,1,1,1,0
+demo_branch_project_employee, Model Branch Project Employee,hiworth_hr_attendance.model_branch_project,hiworth_project_management.group_employee,1,0,0,0
+
+
+
+
+demo_keywords_tags, Model Keywords Tags,hiworth_project_management.model_keywords_tags,hiworth_project_management.group_manager,1,1,1,0
+demo_keywords_tags_customer, Model Keywords Tags Customer,hiworth_project_management.model_keywords_tags,hiworth_project_management.group_user,1,1,0,0
+demo_keywords_tags_employee, Model Keywords Tags Employee,hiworth_project_management.model_keywords_tags,hiworth_project_management.group_employee,1,1,0,0
+
+demo_facing_direction, Model Facing Direction,hiworth_project_management.model_facing_direction,hiworth_project_management.group_manager,1,1,1,0
+demo_facing_direction_customer, Model Facing Direction Customer,hiworth_project_management.model_facing_direction,hiworth_project_management.group_user,1,1,0,0
+demo_facing_direction_employee, Model Facing Direction Employee,hiworth_project_management.model_facing_direction,hiworth_project_management.group_employee,1,1,0,0
+
+
+
+demo_employee_file_details, Model File Details Employee,hiworth_project_management.model_customer_file_details,hiworth_project_management.group_employee,1,1,1,0
+demo_manager_file_details, Model File Details Manager,hiworth_project_management.model_customer_file_details,hiworth_project_management.group_manager,1,1,1,0
+
+demo_employee_file_transfer_details, Model File Transfer Details Employee,hiworth_project_management.model_transfer_document,hiworth_project_management.group_employee,1,1,1,0
+demo_manager_file_transfer_details, Model File Transfer Details Manager,hiworth_project_management.model_transfer_document,hiworth_project_management.group_manager,1,1,1,0
+
+
+demo_manager_stock_location_details, Model Stock Location Details Manager,hiworth_project_management.model_stock_location,hiworth_project_management.group_manager,1,1,1,0
+
+demo_manager_charge, Model Manager Charge,hiworth_project_management.model_manager_charge,hiworth_project_management.group_manager,1,1,1,0 	 
+

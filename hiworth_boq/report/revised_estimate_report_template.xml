@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="report_revised_estimate">
+	<t t-call="report.html_container">
+		<t t-foreach="docs" t-as="o">
+			<t t-call="report.external_layout">
+				<div class="page">
+					<center><b><h2>Revised Estimate</h2></b></center>
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<td colspan="10"><center><strong>Name of work :- <span t-field="o.name_of_work"/>Package No.<span t-field="o.package_no"/>,Block :<span t-field="o.block_id.name"/> , District:<span t-field="o.district_id.name"/>,Panchayath:<span t-field="o.panchayath_id.name"/></strong></center></td>
+							</tr>
+							<tr>
+								<td colspan="10"><strong><center><span>Name of the Contractor:<span t-field="o.bidder_name"/></span><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>
+								<span>Agt:No: <span t-field="o.agent_no"/> Date:<span t-field="o.date"/></span></center></strong></td>
+							</tr>							
+							<tr>
+								<td colspan="10"><center><strong>Revised Estimate</strong></center></td>
+							</tr>
+							<tr></tr>
+							<tr>
+								<td><strong>Sl No.</strong></td>
+								<td><strong>Description</strong></td>
+								<td><strong>No.</strong></td>
+								<td><strong>L</strong></td>
+								<td><strong>B</strong></td>
+								<td><strong>D</strong></td>
+								<td><strong>Quantity</strong></td>
+								<td><strong>Unit</strong></td>
+								<td><strong>Rate</strong></td>
+								<td><strong>Amount</strong></td>
+							</tr>							
+						</thead>
+						<tbody>
+							<t t-foreach="o.line_ids" t-as="line">
+								<tr>
+									<td><span t-field="line.sl_no"/>
+									</td>							
+									<td><span t-field="line.product_id.name"/></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+								<t t-set="l_tot1" t-value="0"/>
+								<t t-set="no_tot1" t-value="0"/>			
+								<t t-set="b_tot1" t-value="0"/>
+								<t t-set="d_tot1" t-value="0"/>		
+								<t t-set="qty_tot1" t-value="0"/>	
+
+								<t t-set="l_tot2" t-value="0"/>
+								<t t-set="no_tot2" t-value="0"/>			
+								<t t-set="b_tot2" t-value="0"/>
+								<t t-set="d_tot2" t-value="0"/>		
+								<t t-set="qty_tot2" t-value="0"/>
+
+								<t t-set="steel_qty1" t-value="0"/>
+								<t t-set="steel_qty2" t-value="0"/>
+
+								<!-- Already done -->
+								<t t-if="line.already_done_ids">
+									<tr>
+										<td></td>							
+										<td><strong>Already done</strong></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>							
+									
+									<!-- Group based on item type  -->
+										<t t-set="item_type" t-value="[]"/>
+
+										<t t-foreach="line.already_done_ids" t-as="l">
+
+											<t t-set="item_type" t-value="item_type+[l.type_id]"/>
+
+										</t>
+										<t t-foreach="set(item_type)" t-as="typ">
+											<tr>
+											<td></td>
+											<td><strong t-esc="typ.name"/></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											</tr>
+											<t t-foreach="line.already_done_ids" t-as="l">
+
+												<t t-if="typ.id==l.type_id.id">
+													<tr>
+														<td></td>		
+														<td><span t-field="l.name"/></td>
+														<td><span t-field="l.no"/></td>
+														<td><span t-field="l.l"/></td>
+														<td><span t-field="l.b"/></td>
+														<td><span t-field="l.d"/></td>
+														<td><span t-esc="'{0:,.3f}'.format(l.qty)"/></td>
+														<td></td>
+														<td></td>
+														<td></td>													
+													</tr>
+												</t>												
+											</t>
+										</t>
+										<tr></tr>										
+										<t t-foreach="line.already_done_ids" t-as="res">
+											<!-- <t t-set="l_tot1" t-value="l_tot1+res.l_avg"/>
+											<t t-set="no_tot1" t-value="no_tot1+res.no"/>
+											<t t-set="b_tot1" t-value="b_tot1+res.b_avg"/>
+											<t t-set="d_tot1" t-value="d_tot1+res.d_avg"/> -->
+											<t t-set="qty_tot1" t-value="qty_tot1+res.qty"/>
+										</t>								
+										<!-- <tr>
+											<td></td>
+											<td><strong>Total</strong></td>
+											<td><span t-esc="no_tot1"/></td>
+											<td><span t-esc="'{0:,.2f}'.format(l_tot1)"/></td>
+											<td><span t-esc="'{0:,.2f}'.format(b_tot1)"/></td>
+											<td><span t-esc="'{0:,.2f}'.format(d_tot1)"/></td>
+											<td><span t-esc="'{0:,.3f}'.format(qty_tot1)"/></td>
+											<td><span t-field="line.uom_id.name"/></td>
+											<td><span t-esc="'{0:,.2f}'.format(line.estimated_rate)"/></td>
+											<td><span t-esc="'{0:,.2f}'.format(line.untaxed_amt)"/></td>
+										</tr> -->
+
+								<t t-foreach="line.already_done_steel_ids" t-as="t">
+									<tr>
+										<td></td>		
+										<td><span t-field="t.name"/></td>
+										<td><span t-field="t.no"/></td>
+										<!-- <td><span t-field="t.diameter.id"/></td> -->
+										<td><span t-field="t.length"/></td>
+										<td></td>
+										<td><span t-esc="'{0:,.3f}'.format(t.qty_in_meter)"/></td>
+										<td><span t-esc="'{0:,.3f}'.format(t.qty)"/></td>
+										<td></td>
+										<td></td>
+										<td></td>	
+										
+										<t t-set="steel_qty1" t-value="steel_qty1+t.qty"/> 
+									</tr>
+								</t>	
+								
+								</t>
+								<!-- To be done -->
+								<t t-if="line.to_be_done_ids">
+									<tr>
+										<td></td>							
+										<td><strong>To be done</strong></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>							
+																		
+									<!-- Group based on item type  -->
+										<t t-set="item_type" t-value="[]"/>
+
+										<t t-foreach="line.to_be_done_ids" t-as="t">
+											<t t-set="item_type" t-value="item_type+[t.type_id]"/>
+										</t>
+										<t t-foreach="set(item_type)" t-as="typ">
+											<tr>
+											<td></td>
+											<td><strong t-esc="typ.name"/></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											</tr>
+											<t t-foreach="line.to_be_done_ids" t-as="t">
+
+												<t t-if="typ.id==t.type_id.id">
+													<tr>
+														<td></td>		
+														<td><span t-field="t.name"/></td>
+														<td><span t-field="t.no"/></td>
+														<td><span t-field="t.l"/></td>
+														<td><span t-field="t.b"/></td>
+														<td><span t-field="t.d"/></td>
+														<td><span t-esc="'{0:,.3f}'.format(t.qty)"/></td>
+														<td></td>
+														<td></td>
+														<td></td>							
+													</tr>
+												</t>
+											</t>
+										</t>
+										<tr></tr>
+										<t t-foreach="line.to_be_done_ids" t-as="rec">
+											<!-- <t t-set="l_tot2" t-value="l_tot2+rec.l_avg"/>
+											<t t-set="no_tot2" t-value="no_tot2+rec.no"/>
+											<t t-set="b_tot2" t-value="b_tot2+rec.b_avg"/>
+											<t t-set="d_tot2" t-value="d_tot2+rec.d_avg"/> -->
+											<t t-set="qty_tot2" t-value="qty_tot2+rec.qty"/>
+										</t>								
+										<!-- <tr>
+											<td></td>
+											<td><strong>Total</strong></td>
+											<td><span t-esc="no_tot2"/></td>
+											<td><span t-esc="'{0:,.2f}'.format(l_tot2)"/></td>
+											<td><span t-esc="'{0:,.2f}'.format(b_tot2)"/></td>
+											<td><span t-esc="'{0:,.2f}'.format(d_tot2)"/></td>
+											<td><span t-esc="'{0:,.3f}'.format(qty_tot2)"/></td>
+											<td><span t-field="line.uom_id.name"/></td>
+											<td><span t-esc="'{0:,.2f}'.format(line.estimated_rate)"/></td>
+											<td><span t-esc="'{0:,.2f}'.format(line.untaxed_amt)"/></td>
+										</tr> -->
+									<t t-foreach="line.to_be_done_steel_ids" t-as="t">
+										<tr>
+											<td></td>		
+											<td><span t-field="t.name"/></td>
+											<td><span t-field="t.no"/></td>
+											<!-- <td><span t-field="t.diameter.id"/></td> -->
+											<td><span t-field="t.length"/></td>
+											<td></td>
+											<td><span t-esc="'{0:,.3f}'.format(t.qty_in_meter)"/></td>
+											<td><span t-esc="'{0:,.3f}'.format(t.qty)"/></td>
+											<td></td>
+											<td></td>
+											<td></td>	
+										
+											<t t-set="steel_qty2" t-value="steel_qty2+t.qty"/>							 
+										</tr>
+									</t>	
+								</t>
+
+								<!-- Final total -->							
+								<t t-set="l_tot" t-value="l_tot1 + l_tot2"/>
+								<t t-set="no_tot" t-value="no_tot1 + no_tot2"/>
+								<t t-set="b_tot" t-value="b_tot1 + b_tot2"/>
+								<t t-set="d_tot" t-value="d_tot1 + d_tot2"/>
+								<t t-set="qty_tot" t-value="qty_tot1 + qty_tot2 + steel_qty1 + steel_qty2"/>
+								<tr style="background-color: #F2F2F2;">
+									<td></td>
+									<td><strong>Total</strong></td>
+									<td><!-- <span t-esc="no_tot"/> --></td>
+									<td><!-- <span t-esc="'{0:,.2f}'.format(l_tot)"/> --></td>
+									<td><!-- <span t-esc="'{0:,.2f}'.format(b_tot)"/> --></td>
+									<td><!-- <span t-esc="'{0:,.2f}'.format(d_tot)"/> --></td>
+									<td><span t-esc="'{0:,.3f}'.format(qty_tot)"/></td>
+									<td><span t-field="line.uom_id.name"/></td>
+									<td><span t-esc="'{0:,.2f}'.format(line.estimated_rate)"/></td>
+									<td><span t-esc="'{0:,.2f}'.format(line.untaxed_amt)"/></td>
+								</tr>
+									
+							</t>
+
+							<!-- Extra Items -->
+							<tr style="background-color: #514848;">
+									<td></td>							
+									<td><strong>Extra Items</strong></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+							</tr>
+							<t t-foreach="o.extra_line_ids" t-as="line">
+								
+								<tr>
+									<td><span t-field="line.sl_no"/>
+									</td>							
+									<td><span t-field="line.product_id.name"/></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+								<t t-set="l_tot1" t-value="0"/>
+								<t t-set="no_tot1" t-value="0"/>			
+								<t t-set="b_tot1" t-value="0"/>
+								<t t-set="d_tot1" t-value="0"/>		
+								<t t-set="qty_tot1" t-value="0"/>	
+
+								<t t-set="l_tot2" t-value="0"/>
+								<t t-set="no_tot2" t-value="0"/>			
+								<t t-set="b_tot2" t-value="0"/>
+								<t t-set="d_tot2" t-value="0"/>		
+								<t t-set="qty_tot2" t-value="0"/>
+							
+								<t t-set="steel_qty1" t-value="0"/>
+								<t t-set="steel_qty2" t-value="0"/>
+
+								<!-- Already done -->
+								<t t-if="line.already_done_ids">
+									<tr>
+										<td></td>							
+										<td><strong>Already done</strong></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+
+									<!-- Group based on item type  -->
+										<t t-set="item_type" t-value="[]"/>
+
+										<t t-foreach="line.already_done_ids" t-as="l">
+
+											<t t-set="item_type" t-value="item_type+[l.type_id]"/>
+
+										</t>
+										<t t-foreach="set(item_type)" t-as="typ">
+											<tr>
+											<td></td>
+											<td><strong t-esc="typ.name"/></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											</tr>
+											<t t-foreach="line.already_done_ids" t-as="l">
+
+												<t t-if="typ.id==l.type_id.id">
+													<tr>
+														<td></td>		
+														<td><span t-field="l.name"/></td>
+														<td><span t-field="l.no"/></td>
+														<td><span t-field="l.l"/></td>
+														<td><span t-field="l.b"/></td>
+														<td><span t-field="l.d"/></td>
+														<td><span t-esc="'{0:,.3f}'.format(l.qty)"/></td>
+														<td></td>
+														<td></td>
+														<td></td>												
+													</tr>
+												</t>												
+											</t>
+										</t>
+										<tr></tr>
+										<t t-foreach="line.already_done_ids" t-as="res">
+											<!-- <t t-set="l_tot1" t-value="l_tot1+res.l_avg"/>
+											<t t-set="no_tot1" t-value="no_tot1+res.no"/>
+											<t t-set="b_tot1" t-value="b_tot1+res.b_avg"/>
+											<t t-set="d_tot1" t-value="d_tot1+res.d_avg"/> -->
+											<t t-set="qty_tot1" t-value="qty_tot1+res.qty"/>
+										</t>
+										<!-- <tr>
+												<td></td>
+												<td><strong>Total</strong></td>
+												<td><span t-esc="no_tot1"/></td>
+												<td><span t-esc="'{0:,.2f}'.format(l_tot1)"/></td>
+												<td><span t-esc="'{0:,.2f}'.format(b_tot1)"/></td>
+												<td><span t-esc="'{0:,.2f}'.format(d_tot1)"/></td>
+												<td><span t-esc="'{0:,.3f}'.format(qty_tot1)"/></td>
+												<td><span t-field="line.uom_id.name"/></td>
+												<td><span t-esc="'{0:,.2f}'.format(line.estimated_rate)"/></td>
+												<td><span t-esc="'{0:,.2f}'.format(line.untaxed_amt)"/></td>
+										</tr>				
+ -->
+									<t t-foreach="line.already_done_steel_ids" t-as="t">
+										<tr>
+											<td></td>		
+											<td><span t-field="t.name"/></td>
+											<td><span t-field="t.no"/></td>
+											<!-- <td><span t-field="t.diameter.id"/></td> -->
+											<td><span t-field="t.length"/></td>
+											<td></td>
+											<td><span t-esc="'{0:,.3f}'.format(t.qty_in_meter)"/></td>
+											<td><span t-esc="'{0:,.3f}'.format(t.qty)"/></td>
+											<td></td>
+											<td></td>
+											<td></td>	
+										
+											<t t-set="steel_qty1" t-value="steel_qty1+t.qty"/>							 
+										</tr>
+									</t>											
+									
+								</t>
+
+								<!-- To be done -->
+								<t t-if="line.to_be_done_ids">
+									<tr>
+										<td></td>							
+										<td><strong>To be done</strong></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>							
+									
+									<!-- Group based on item type  -->
+										<t t-set="item_type" t-value="[]"/>
+
+										<t t-foreach="line.to_be_done_ids" t-as="t">
+											<t t-set="item_type" t-value="item_type+[t.type_id]"/>
+										</t>
+										<t t-foreach="set(item_type)" t-as="typ">
+											<tr>
+											<td></td>
+											<td><strong t-esc="typ.name"/></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											</tr>
+											<t t-foreach="line.to_be_done_ids" t-as="t">
+
+												<t t-if="typ.id==t.type_id.id">
+													<tr>
+														<td></td>		
+														<td><span t-field="t.name"/></td>
+														<td><span t-field="t.no"/></td>
+														<td><span t-field="t.l"/></td>
+														<td><span t-field="t.b"/></td>
+														<td><span t-field="t.d"/></td>
+														<td><span t-esc="'{0:,.3f}'.format(t.qty)"/></td>
+														<td></td>
+														<td></td>
+														<td></td>													
+													</tr>
+												</t>												
+											</t>
+										</t>
+										<tr></tr>
+									<t t-foreach="line.to_be_done_ids" t-as="rec">
+										<!-- <t t-set="l_tot2" t-value="l_tot2+rec.l_avg"/>
+										<t t-set="no_tot2" t-value="no_tot2+rec.no"/>
+										<t t-set="b_tot2" t-value="b_tot2+rec.b_avg"/>
+										<t t-set="d_tot2" t-value="d_tot2+rec.d_avg"/> -->
+										<t t-set="qty_tot2" t-value="qty_tot2+rec.qty"/>
+									</t>								
+									<!-- <tr>
+										<td></td>
+										<td><strong>Total</strong></td>
+										<td><span t-esc="no_tot2"/></td>
+										<td><span t-esc="'{0:,.2f}'.format(l_tot2)"/></td>
+										<td><span t-esc="'{0:,.2f}'.format(b_tot2)"/></td>
+										<td><span t-esc="'{0:,.2f}'.format(d_tot2)"/></td>
+										<td><span t-esc="'{0:,.3f}'.format(qty_tot2)"/></td>
+										<td><span t-field="line.uom_id.name"/></td>
+										<td><span t-esc="'{0:,.2f}'.format(line.extra_rate)"/></td>
+										<td><span t-esc="'{0:,.2f}'.format(line.untaxed_amt)"/></td>
+									</tr> -->
+									<t t-foreach="line.to_be_done_steel_ids" t-as="t">
+										<tr>
+											<td></td>		
+											<td><span t-field="t.name"/></td>
+											<td><span t-field="t.no"/></td>
+											<!-- <td><span t-field="t.diameter.id"/></td> -->
+											<td><span t-field="t.length"/></td>
+											<td></td>
+											<td><span t-esc="'{0:,.3f}'.format(t.qty_in_meter)"/></td>
+											<td><span t-esc="'{0:,.3f}'.format(t.qty)"/></td>
+											<td></td>
+											<td></td>
+											<td></td>	
+										
+											<t t-set="steel_qty2" t-value="steel_qty2+t.qty"/> 
+
+										</tr>
+									</t>
+								</t>
+
+								<!-- Final total -->							
+								<t t-set="l_tot" t-value="l_tot1 + l_tot2"/>
+								<t t-set="no_tot" t-value="no_tot1 + no_tot2"/>
+								<t t-set="b_tot" t-value="b_tot1 + b_tot2"/>
+								<t t-set="d_tot" t-value="d_tot1 + d_tot2"/>
+								<t t-set="qty_tot" t-value="qty_tot1 + qty_tot2 + steel_qty1 + steel_qty2"/>
+								<tr style="background-color: #F2F2F2;">
+									<td></td>
+									<td><strong>Total</strong></td>
+									<td><span t-esc="no_tot"/></td>
+									<td><span t-esc="'{0:,.2f}'.format(l_tot)"/></td>
+									<td><span t-esc="'{0:,.2f}'.format(b_tot)"/></td>
+									<td><span t-esc="'{0:,.2f}'.format(d_tot)"/></td>
+									<td><span t-esc="'{0:,.3f}'.format(qty_tot)"/></td>
+									<td><span t-field="line.uom_id.name"/></td>
+									<td><span t-esc="'{0:,.2f}'.format(line.extra_rate)"/></td>
+									<td><span t-esc="'{0:,.2f}'.format(line.untaxed_amt)"/></td>
+								</tr>
+									
+							</t>
+
+						</tbody>					
+					</table>				
+				   
+				</div>
+			</t>
+		</t>
+	</t>
+</template>
+</data>
+</openerp>

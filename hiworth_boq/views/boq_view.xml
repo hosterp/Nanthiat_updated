@@ -1,0 +1,851 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		<menuitem 
+				id="main_menu_hiworth_boq" 
+				parent="hiworth_construction.menu_hiworth_finance_root"
+				name="BOQ" 
+				sequence="2" />
+
+		<record id="view_bill_of_quantity_form" model="ir.ui.view">
+			<field name="name">bill.of.quantity.form</field>
+			<field name="model">bill.of.quantity</field>
+			<field name="priority">1</field>
+			<field name="arch" type="xml">
+				<form string="Bill of Quantity">
+						<div class="oe_right oe_button_box" name="buttons">					
+							<button class="oe_inline oe_stat_button" type="object" name="view_bill" icon="fa-tasks" string="Bill"/> 
+						</div>
+						<group col="4">
+								<field name="date"/>
+								<field name="tender_inviting_authority"/>
+								<field name="name_of_work"/>
+								<field name="contract_no"/>
+								<field name="bidder_name"/>	
+								<field name="package_no"/>
+								<field name="agent_no"/>
+								<field name="block_id"/>
+								<field name="panchayath_id"/>
+								<field name="district_id"/>	
+								<field name="block" invisible="1"/>
+								<field name="panchayath" invisible="1"/>
+								<field name="district" invisible="1"/>				
+						</group>
+						<notebook>
+							<page string="BOQ Info">
+								<field name="line_ids" nolabel="1" >
+									<tree editable="bottom">
+										<field name="sl_no"/>
+										<field name="product_id" />
+										<field name="product" invisible="1"/>
+										<field name="categ_id" />
+										<field name="category" invisible="1"/>		
+										<field name="quantity"/>
+										<field name="uom_id" />
+										<field name="estimated_rate" />
+										<field name="untaxed_amt" />
+										<field name="amt_in_words" />	
+									</tree>
+								</field>
+							</page>
+						</notebook>
+				</form>
+
+			</field>
+		</record>
+
+		<record id="view_bill_of_quantity_tree" model="ir.ui.view">
+			<field name="name">bill.of.quantity.tree</field>
+			<field name="model">bill.of.quantity</field>
+			<field name="arch" type="xml">
+				<tree string="Bill of Quantity">
+					<field name="date" />
+					<field name="tender_inviting_authority" />
+					<field name="name_of_work" />
+					<field name="contract_no" />
+					<field name="bidder_name" />
+					<field name="package_no" />
+					<field name="agent_no" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="action_bill_of_quantity_menu" model="ir.actions.act_window">
+			<field name="name">Bill of Quantity</field>
+			<field name="res_model">bill.of.quantity</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="view_bill_of_quantity_tree" />
+		</record>
+
+
+		<menuitem 
+			id="main_menu_hiworth_boq_sub" 
+			name="BOQ" 
+			parent="main_menu_hiworth_boq"
+			action="action_bill_of_quantity_menu"
+			sequence="1" />
+	  
+	  
+		<record id="invoice_tree_new" model="ir.ui.view">
+			<field name="name">account.invoice.tree</field>
+			<field name="model">account.invoice</field>
+			<field name="arch" type="xml">
+				<tree colors="blue:status1 == 'draft';black:status1 in ('confirm','second_bill');" string="Invoice">
+					<field name="partner_id" groups="base.group_user"/>
+					<field name="commercial_partner_id" invisible="1"/>
+					<field name="date_invoice"/>
+					<field name="number"/>
+					<field name="reference" invisible="1"/>
+					<field name="name" invisible="1"/>
+					<field name="journal_id" invisible="1"/>
+					<field name="period_id" invisible="1" groups="account.group_account_user"/>
+					<field name="company_id" groups="base.group_multi_company" widget="selection"/>
+					<field name="user_id" string="Responsible"/>
+					<field name="date_due"/>
+					<field name="origin"/>
+					<field name="currency_id" groups="base.group_multi_currency"/>
+					<field name="residual" sum="Residual Amount"/>
+					<field name="amount_untaxed" sum="Untaxed Amount"/>
+					<field name="amount_total" sum="Total Amount"/>
+					<field name="state" invisible="1"/>
+					<field name="status1"/>
+					<field name="type" invisible="context.get('type',True)"/>
+				</tree>
+			</field>
+		</record>
+
+
+		<record id="first_bill_invoice_form_123" model="ir.ui.view">
+			<field name="name">account.invoice.form</field>
+			<field name="model">account.invoice</field>
+			<field name="arch" type="xml">
+				<form string="First Bill">
+				<header>
+					<button name="button_confirm" attrs="{'invisible':[('status1', '!=', 'draft')]}" string="To Confirm" type="object" class="oe_highlight"/>
+					<button name="button_confirm_update" attrs="{'invisible':[('status1', '!=', 'draft')]}" string="To Confirm &amp; Update To Be Done" type="object" class="oe_highlight"/>
+					<button name="button_update_already_done" attrs="{'invisible':[('status1', '!=', 'draft')]}" string="To Confirm &amp; Update Already Done" type="object" class="oe_highlight"/>	
+
+					<button name="generate_second_bill" attrs="{'invisible':[('status1', '!=', 'confirm')]}" string="Generate Approved Bill" type="object" class="oe_highlight"/>
+					<field name="status1" widget="statusbar" nolabel="1" statusbar_visible="draft,confirm,second_bill"/>
+					<field name="state" invisible="1"/>
+				</header>
+				<h1>
+                    <field name="number" class="oe_inline" />
+                </h1>
+				<!-- <sheet string="Invoice">  -->
+					<!-- <field name="name"/> -->
+					<field name="type" invisible="1"/>
+					<group>
+						<group>
+							<field name="bill_name"/>
+							<field string="Customer" name="partner_id"
+								on_change="onchange_partner_id(type, partner_id, date_invoice, payment_term, partner_bank_id, company_id, context)"
+								context="{'search_default_customer':1, 'show_address': 1}"
+								options='{"always_reload": True}'
+								domain="[('customer', '=', True)]"/>
+							<field name="boq_ref_id"/>
+							<field name="project_id"/>
+							<field name="is_first_bill" invisible="1"/>
+						</group>
+						<group>
+							<field name="date_invoice" on_change="onchange_payment_term_date_invoice(payment_term, date_invoice)" />
+							<field name="internal_number" invisible="1"/>
+							<field name="journal_id" groups="account.group_account_user"
+								on_change="onchange_journal_id(journal_id)" options="{'no_create': True}"
+								attrs="{'readonly':[('internal_number','!=',False)]}"/>
+							<field domain="[('company_id', '=', company_id),('type','=', 'receivable')]"
+								name="account_id" groups="account.group_account_user"
+								context="{'periods_special': False, 'all_fiscalyear': True}"/>
+
+							<label for="currency_id" groups="base.group_multi_currency"/>
+							<div groups="base.group_multi_currency">
+								<field name="currency_id" class="oe_inline"/>
+								<button name="%(account.action_account_change_currency)d" type="action"
+								  class="oe_inline oe_link oe_edit_only"
+								  string="(change)"
+								  attrs="{'invisible':[('state','!=','draft')]}"
+								  groups="account.group_account_user"/>
+							</div>
+						</group>
+					</group>
+					<field name="sent" invisible="1"/>
+					<notebook colspan="4">
+						<page string="Invoice Lines">
+							<field name="invoice_line" nolabel="1" widget="one2many_list" context="{'type': type,'invoice': id}">
+								<tree string="Invoice Lines">
+									<field name="sequence" widget="handle" invisible="1"/>
+									<field name="sl_no"/>
+									<field name="product_id"
+										on_change="product_id_change(product_id, uos_id, quantity, name, parent.type, parent.partner_id, parent.fiscal_position, price_unit, parent.currency_id, parent.company_id, context)"/>
+									<field name="name"/>
+									<field name="company_id" invisible="1"/>
+									<field name="account_id" groups="account.group_account_user"
+										domain="[('company_id', '=', parent.company_id), ('journal_id', '=', parent.journal_id), ('type', '=', 'other')]"
+										on_change="onchange_account_id(product_id, parent.partner_id, parent.type, parent.fiscal_position,account_id)"/>
+									<field name="account_analytic_id" groups="analytic.group_analytic_accounting"
+										domain="[('type','!=','view'), ('company_id', '=', parent.company_id), ('state','not in',('close','cancelled'))]" invisible="1"/>
+									<field name="quantity"/>
+									<field name="uos_id" groups="product.group_uom"
+										on_change="uos_id_change(product_id, uos_id, quantity, name, parent.type, parent.partner_id, parent.fiscal_position, price_unit, parent.currency_id, parent.company_id, context)"/>
+									<field name="price_unit"/>
+									<field name="discount" groups="sale.group_discount_per_so_line"/>
+									<field name="invoice_line_tax_id" widget="many2many_tags" context="{'type':parent.type}"
+										domain="[('parent_id','=',False),('company_id', '=', parent.company_id)]"/>
+									<field name="price_subtotal"/>
+								</tree>
+								<form string="Invoice">
+									<group>
+									<group>
+										<field name="sl_no" invisible="1"/>
+										<field name="product_id"
+											on_change="product_id_change(product_id, uos_id, quantity, name, parent.type, parent.partner_id, parent.fiscal_position, price_unit, parent.currency_id, parent.company_id, context)"/>
+										<field name="name"/>
+										<field name="company_id" invisible="1"/>
+										<field name="account_id" groups="account.group_account_user"
+											domain="[('company_id', '=', parent.company_id), ('journal_id', '=', parent.journal_id), ('type', '=', 'other')]"
+											on_change="onchange_account_id(product_id, parent.partner_id, parent.type, parent.fiscal_position,account_id)"/>                               
+										<field name="quantity" digits="(14, 3)"/>
+									</group>
+									<group>
+										<field name="uos_id" groups="product.group_uom"
+											on_change="uos_id_change(product_id, uos_id, quantity, name, parent.type, parent.partner_id, parent.fiscal_position, price_unit, parent.currency_id, parent.company_id, context)"/>
+										<field name="price_unit"/>
+										<field name="discount" groups="sale.group_discount_per_so_line"/>
+										<field name="invoice_line_tax_id" widget="many2many_tags" context="{'type':parent.type}"
+											domain="[('parent_id','=',False),('company_id', '=', parent.company_id)]"/>
+										<field name="price_subtotal"/>
+										<field name="search_product_id"/>	
+										<div>											
+											<button name="line_duplicate_button" string="Duplicate" class="oe_highlight" type="object"/>		
+										</div>					
+
+								</group>
+								</group>
+								<notebook>
+									<page string="BOQ Info">
+
+										<field name="boq_ids">
+											
+											<tree string="BOQ Info" editable="bottom">
+												<field name="name"/>
+												<!-- <button name="split_quantities" string="Split" type="object" icon="STOCK_PREFERENCES"/> -->
+												<field name="type_id"/>
+												<field name="no"/>	
+												<field name="l_char" placeholder="l1+l2+l3+....."/>
+												<field name="l" readonly="1"/>
+												<field name="l_avg" readonly="1" invisible="1"/>
+												<field name="b_char" placeholder="b1+b2+b3+....."/>
+												<field name="b" readonly="1"/>
+												<field name="b_avg" readonly="1" invisible="1"/>
+												<field name="d_char" placeholder="d1+d2+d3+....."/>
+												<field name="d" readonly="1"/>
+												<field name="d_avg" readonly="1" invisible="1"/>
+												<field name="avg" invisible="1"/>
+												<field name="qty" digits="(14, 3)"/>
+												<field name="is_duplicate"/>		
+											</tree>
+										</field>  
+										<separator string="Steel Works" colspan="2"/>
+										<field name="steel_ids" string="Steel Works">
+											<tree editable="bottom">
+												<field name="name"/>
+												<field name="diameter"/>
+												<field name="no"/>
+												<field name="length"/>
+												<field name="qty_in_meter"/>
+												<field name="qty"/>								
+											</tree>
+										</field>                          	
+									</page>   
+								</notebook>      
+							</form>	    		
+							</field>
+							<group class="oe_subtotal_footer oe_right">
+								<field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+								<div>
+									<label for="amount_tax"/>
+									<button name="button_reset_taxes" states="draft,proforma2"
+										string="(update)" class="oe_link oe_edit_only"
+										type="object" help="Recompute taxes and total"/>
+								</div>
+								<field name="amount_tax" nolabel="1" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+								<field name="amount_total" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+								<field name="residual" groups="account.group_account_user" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+								<field name="reconciled" invisible="1"/>
+							</group>
+							<group>
+									<field name="payment_term" class="oe_inline" on_change="onchange_payment_term_date_invoice(payment_term, date_invoice)" invisible="1"/>
+							</group>
+							<div class="oe_clear">
+								<label for="comment"/>
+							</div>
+							<field name="comment" class="oe_inline" placeholder="Additional notes..."/>
+						</page>
+						<page string="Other Info">
+							<group col="4">
+								<group>
+									<field name="company_id" on_change="onchange_company_id(company_id,partner_id,type,invoice_line,currency_id)" widget="selection" groups="base.group_multi_company"/>
+									<field name="user_id" groups="base.group_user" context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'account.group_account_invoice']}"/>
+									<field domain="[('partner_id.ref_companies', 'in', [company_id])]" name="partner_bank_id"/>
+									<field name="period_id" domain="[('state', '=', 'draft'), ('company_id', '=', company_id)]"
+										groups="account.group_account_manager"
+										string="Accounting Period"
+										placeholder="force period"/>
+									<field name="date_due"/>
+								</group>
+								<group>
+									<field name="origin" groups="base.group_user"/>
+									<field name="name"/>
+									<field name="move_id" groups="account.group_account_user"/>
+								</group>
+							</group>
+							<field name="tax_line">
+								<tree editable="bottom" string="Taxes">
+									<field name="name"/>
+									<field name="account_id" groups="account.group_account_user"/>
+									<field name="base" on_change="base_change(base,parent.currency_id,parent.company_id,parent.date_invoice)" readonly="1"/>
+									<field name="amount" on_change="amount_change(amount,parent.currency_id,parent.company_id,parent.date_invoice)"/>
+									<field invisible="True" name="base_amount"/>
+									<field invisible="True" name="tax_amount"/>
+									<field name="factor_base" invisible="True"/>
+									<field name="factor_tax" invisible="True"/>
+								</tree>
+							</field>
+						</page>
+						<page string="Payments" groups="base.group_user">
+							<field name="payment_ids">
+								<tree string="Payments">
+									<field name="date"/>
+									<field name="move_id"/>
+									<field name="ref"/>
+									<field name="name"/>
+									<field name="journal_id" groups="base.group_user"/>
+									<field name="debit"/>
+									<field name="credit"/>
+									<field name="amount_currency" groups="base.group_multi_currency"/>
+									<field name="currency_id" groups="base.group_multi_currency"/>
+								</tree>
+							</field>
+						</page>
+											
+
+					</notebook>                             
+					
+				<!-- </sheet> -->
+				<div class="oe_chatter">
+					<field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+					<field name="message_ids" widget="mail_thread"/>
+				</div>
+				</form>
+			</field>
+		</record>
+
+	
+		<record id="action_invoice_form_inherited2" model="ir.actions.act_window">
+			<field name="name">First Bill</field>
+			<field name="res_model">account.invoice</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="view_type">form</field>
+			<field name="domain">[('is_first_bill','=',True)]</field>        
+			<field name="view_mode">tree,form</field>
+		</record>
+
+
+		<record id="action_invoice_form_inherited2_tree" model="ir.actions.act_window.view">
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="invoice_tree_new" />
+			<field name="act_window_id" ref="action_invoice_form_inherited2" />
+		</record>
+
+		<record id="action_invoice_form_inherited2_form" model="ir.actions.act_window.view">
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="first_bill_invoice_form_123" />
+			<field name="act_window_id" ref="action_invoice_form_inherited2" />
+		</record>
+
+
+		<menuitem 
+				id="menu_invoice_form_inherited" 
+				name="First Bill" 
+				parent="main_menu_hiworth_boq"
+				action="action_invoice_form_inherited2"
+				sequence="40" />
+
+
+		<record id="second_bill_invoice_form_123" model="ir.ui.view">
+			<field name="name">account.invoice.form</field>
+			<field name="model">account.invoice</field>
+			<field name="arch" type="xml">
+				<form string="Approved First Bill">
+				<header>
+					<button name="button_confirm" attrs="{'invisible':[('status1', '!=', 'draft')]}" string="To Confirm" type="object" class="oe_highlight"/>	
+					<button name="approve_button" attrs="{'invisible':[('status1', '!=', 'second_bill')]}" string="To Approve" type="object" class="oe_highlight"/>	
+					<button name="action_update_re" attrs="{'invisible':[('status1', '!=', 'approve')]}" string="Update Already Done" type="object" class="oe_highlight"/>
+					<button name="action_update_to_be_done" attrs="{'invisible':[('status1', '!=', 'approve')]}" string="Update To Be Done" type="object" class="oe_highlight"/>
+					<button name="axe_approve_button" attrs="{'invisible':[('status1', '!=', 'update')]}" string="AXE Approval" type="object" class="oe_highlight"/>
+					<button name="ee_approve_button" attrs="{'invisible':[('status1', '!=', 'axe_approve')]}" string="EE Approval" type="object" class="oe_highlight"/>					   			   
+					<field name="status1" widget="statusbar" nolabel="1" statusbar_visible="draft,confirm,second_bill,approve,update,axe_approve,ee_approve"/>
+					<field name="state" invisible="1"/>
+				</header>
+				<h1>
+                    <field name="number" class="oe_inline" />
+                </h1>
+					<div class="oe_right oe_button_box" name="buttons">					
+						<button class="oe_inline oe_stat_button" type="object" name="view_first_bill" icon="fa-tasks" string="First Bill"/> 
+					</div>                
+					<field name="type" invisible="1"/>
+					<group>
+						<group>
+							<field name="bill_name"/>
+							<field string="Customer" name="partner_id"
+								on_change="onchange_partner_id(type, partner_id, date_invoice, payment_term, partner_bank_id, company_id, context)"
+								context="{'search_default_customer':1, 'show_address': 1}"
+								options='{"always_reload": True}'
+								domain="[('customer', '=', True)]"/>
+							<field name="is_second_bill" invisible="1"/>
+							<field name="boq_ref_id"/>
+							<field name="project_id"/>           					
+							<field name="parent_id"/>
+						</group>
+						<group>
+							<field name="date_invoice" on_change="onchange_payment_term_date_invoice(payment_term, date_invoice)" />
+							<field name="internal_number" invisible="1"/>
+							<field name="journal_id" groups="account.group_account_user"
+								on_change="onchange_journal_id(journal_id)" options="{'no_create': True}"
+								attrs="{'readonly':[('internal_number','!=',False)]}"/>
+							<field domain="[('company_id', '=', company_id),('type','=', 'receivable')]"
+								name="account_id" groups="account.group_account_user"
+								context="{'periods_special': False, 'all_fiscalyear': True}"/>
+							<label for="currency_id" groups="base.group_multi_currency"/>
+							<div groups="base.group_multi_currency">
+								<field name="currency_id" class="oe_inline"/>
+								<button name="%(account.action_account_change_currency)d" type="action"
+								  class="oe_inline oe_link oe_edit_only"
+								  string="(change)"
+								  attrs="{'invisible':[('state','!=','draft')]}"
+								  groups="account.group_account_user"/>
+							</div>
+						</group>
+					</group>
+					<field name="sent" invisible="1"/>
+					<notebook colspan="4">
+						<page string="Invoice Lines">
+							<field name="invoice_line" nolabel="1" widget="one2many_list" context="{'type': type}">
+								<tree string="Invoice Lines">
+									<field name="sequence" widget="handle" invisible="1"/>
+									<field name="sl_no"/>
+									<field name="product_id"
+										on_change="product_id_change(product_id, uos_id, quantity, name, parent.type, parent.partner_id, parent.fiscal_position, price_unit, parent.currency_id, parent.company_id, context)"/>
+									<field name="name"/>
+									<field name="company_id" invisible="1"/>
+									<field name="account_id" groups="account.group_account_user"
+										domain="[('company_id', '=', parent.company_id), ('journal_id', '=', parent.journal_id), ('type', '=', 'other')]"
+										on_change="onchange_account_id(product_id, parent.partner_id, parent.type, parent.fiscal_position,account_id)"/>
+									<field name="account_analytic_id" groups="analytic.group_analytic_accounting"
+										domain="[('type','!=','view'), ('company_id', '=', parent.company_id), ('state','not in',('close','cancelled'))]" invisible="1"/>
+									<field name="quantity"/>
+									<field name="uos_id" groups="product.group_uom"
+										on_change="uos_id_change(product_id, uos_id, quantity, name, parent.type, parent.partner_id, parent.fiscal_position, price_unit, parent.currency_id, parent.company_id, context)"/>
+									<field name="price_unit"/>
+									<field name="discount" groups="sale.group_discount_per_so_line"/>
+									<field name="invoice_line_tax_id" widget="many2many_tags" context="{'type':parent.type}"
+										domain="[('parent_id','=',False),('company_id', '=', parent.company_id)]"/>
+									<field name="price_subtotal"/>
+								</tree>
+								<form string="Invoice">
+									<group>
+										<group>
+											<field name="sl_no" invisible="1"/>
+											<field name="product_id"
+												on_change="product_id_change(product_id, uos_id, quantity, name, parent.type, parent.partner_id, parent.fiscal_position, price_unit, parent.currency_id, parent.company_id, context)"/>
+											<field name="name"/>
+											<field name="company_id" invisible="1"/>
+											<field name="account_id" groups="account.group_account_user"
+												domain="[('company_id', '=', parent.company_id), ('journal_id', '=', parent.journal_id), ('type', '=', 'other')]"
+												on_change="onchange_account_id(product_id, parent.partner_id, parent.type, parent.fiscal_position,account_id)"/>                               
+											<field name="quantity" digits="(14, 3)"/>
+										</group>
+										<group>
+											<field name="uos_id" groups="product.group_uom"
+												on_change="uos_id_change(product_id, uos_id, quantity, name, parent.type, parent.partner_id, parent.fiscal_position, price_unit, parent.currency_id, parent.company_id, context)"/>
+											<field name="price_unit"/>
+											<field name="discount" groups="sale.group_discount_per_so_line"/>
+											<field name="invoice_line_tax_id" widget="many2many_tags" context="{'type':parent.type}"
+												domain="[('parent_id','=',False),('company_id', '=', parent.company_id)]"/>
+											<field name="price_subtotal"/>
+											<field name="search_product_id"/>	
+											<div>
+												<button name="line_duplicate_button" string="Duplicate" class="oe_highlight" type="object"/>		
+											</div>					
+
+											</group>
+										</group>
+										<notebook>
+											<page string="BOQ Info">
+
+												<field name="boq_ids">
+													
+													<tree string="BOQ Info" editable="bottom">
+														<field name="name"/>
+														<!-- <button name="split_quantities" string="Split" type="object" icon="STOCK_PREFERENCES"/> -->
+														<field name="type_id"/>
+														<field name="no"/>	
+														<field name="l_char" placeholder="l1+l2+l3+....."/>
+														<field name="l" readonly="1"/>
+														<field name="l_avg" readonly="1" invisible="1"/>
+														<field name="b_char" placeholder="b1+b2+b3+....."/>
+														<field name="b" readonly="1"/>
+														<field name="b_avg" readonly="1" invisible="1"/>
+														<field name="d_char" placeholder="d1+d2+d3+....."/>
+														<field name="d" readonly="1"/>
+														<field name="d_avg" readonly="1" invisible="1"/>
+														<field name="avg" invisible="1"/>
+														<field name="qty" digits="(14, 3)"/>
+														<!-- <field name="is_duplicate"/>		 -->
+													</tree>
+												</field>  
+												<separator string="Steel Works" colspan="2"/>
+												<field name="steel_ids" string="Steel Works">
+													<tree editable="bottom">
+														<field name="name"/>
+														<field name="diameter"/>
+														<field name="no"/>
+														<field name="length"/>
+														<field name="qty_in_meter"/>
+														<field name="qty"/>								
+													</tree>
+												</field>                          	
+											</page>   
+										</notebook>   
+										 
+									</form>	
+							</field>
+							<group>
+								<group>
+									<field name="deduction_ids" context="{'default_invoice_id': active_id}" nolabel="1">                            	
+										<tree string="Deductions" editable="bottom">
+											<field name="invoice_id" invisible="1"/>
+											<field name="contract_amt" invisible="1"/>
+											<field name="deduction_id"/>
+											<field name="rate"/>
+											<field name="amount"/>                                 
+										</tree>                               
+									</field>
+								</group>
+								
+								<group class="oe_subtotal_footer oe_right">
+									<field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+									<div>
+										<label for="amount_tax"/>
+										<button name="button_reset_taxes" states="draft,proforma2"
+											string="(update)" class="oe_link oe_edit_only"
+											type="object" help="Recompute taxes and total"/>
+									</div>
+									<field name="amount_tax" nolabel="1" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+									<field name="amount_total" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>	                                
+									<field name="reconciled" invisible="1"/>
+								</group>
+							</group>
+							<group>
+								<group class="oe_subtotal_footer oe_left">
+									<field name="payment_term" class="oe_inline" on_change="onchange_payment_term_date_invoice(payment_term, date_invoice)" invisible="1"/>
+								</group>
+								<group class="oe_subtotal_footer oe_right">	 
+									<field name="apac" widget="monetary" options="{'currency_field': 'currency_id'}" invisible="1"/>                               
+									<field name="deduction" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+									<field name="check_amt" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+									<field name="residual" groups="account.group_account_user" widget="monetary" options="{'currency_field': 'currency_id'}" invisible="1"/>
+									<field name="balance" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+								</group>
+							</group>
+							<div class="oe_clear">
+								<label for="comment"/>
+							</div>
+							<field name="comment" class="oe_inline" placeholder="Additional notes..."/>
+						</page>
+						<page string="Other Info">
+							<group col="4">
+								<group>
+									<field name="company_id" on_change="onchange_company_id(company_id,partner_id,type,invoice_line,currency_id)" widget="selection" groups="base.group_multi_company"/>
+									<field name="user_id" groups="base.group_user" context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'account.group_account_invoice']}"/>
+									<field domain="[('partner_id.ref_companies', 'in', [company_id])]" name="partner_bank_id"/>
+									<field name="period_id" domain="[('state', '=', 'draft'), ('company_id', '=', company_id)]"
+										groups="account.group_account_manager"
+										string="Accounting Period"
+										placeholder="force period"/>
+									<field name="date_due"/>
+								</group>
+								<group>
+									<field name="origin" groups="base.group_user"/>
+									<field name="name"/>
+									<field name="move_id" groups="account.group_account_user"/>
+								</group>
+							</group>
+							<field name="tax_line">
+								<tree editable="bottom" string="Taxes">
+									<field name="name"/>
+									<field name="account_id" groups="account.group_account_user"/>
+									<field name="base" on_change="base_change(base,parent.currency_id,parent.company_id,parent.date_invoice)" readonly="1"/>
+									<field name="amount" on_change="amount_change(amount,parent.currency_id,parent.company_id,parent.date_invoice)"/>
+									<field invisible="True" name="base_amount"/>
+									<field invisible="True" name="tax_amount"/>
+									<field name="factor_base" invisible="True"/>
+									<field name="factor_tax" invisible="True"/>
+								</tree>
+							</field>
+						</page>
+						<page string="Payments" groups="base.group_user">
+							<field name="payment_ids">
+								<tree string="Payments">
+									<field name="date"/>
+									<field name="move_id"/>
+									<field name="ref"/>
+									<field name="name"/>
+									<field name="journal_id" groups="base.group_user"/>
+									<field name="debit"/>
+									<field name="credit"/>
+									<field name="amount_currency" groups="base.group_multi_currency"/>
+									<field name="currency_id" groups="base.group_multi_currency"/>
+								</tree>
+							</field>
+						</page>
+
+						<page string="Bill Status" groups="base.group_user">
+							<field name="status_ids">
+								<tree editable="bottom">
+									<field name="date"/>
+									<field name="user_id"/>
+									<field name="status"/>
+								</tree>	
+							</field>
+						</page>
+						
+					</notebook>                                  
+					
+				<!-- </sheet> -->
+				<div class="oe_chatter">
+					<field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+					<field name="message_ids" widget="mail_thread"/>
+				</div>
+				</form>
+			</field>
+		</record>
+
+
+		<record id="action_invoice_form_inherited3" model="ir.actions.act_window">
+			<field name="name">Approved First Bill</field>
+			<field name="res_model">account.invoice</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[('is_second_bill','=',True)]</field>
+		</record>
+
+
+		 <record id="action_invoice_form_inherited3_tree" model="ir.actions.act_window.view">
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="invoice_tree_new" />            
+			<field name="act_window_id" ref="action_invoice_form_inherited3" />
+		</record>
+
+		<record id="action_invoice_form_inherited3_form" model="ir.actions.act_window.view">
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="second_bill_invoice_form_123" />
+			<field name="act_window_id" ref="action_invoice_form_inherited3" />
+		</record>
+
+
+		<menuitem 
+				id="menu_invoice_form_inherited3" 
+				name="Approved First Bill" 
+				parent="main_menu_hiworth_boq"
+				action="action_invoice_form_inherited3"
+				sequence="45" />
+
+
+		<!-- Bill Status		 -->
+		<record id="bill_status_tree" model="ir.ui.view">
+			<field name="name">bill.status.tree</field>
+			<field name="model">bill.status</field>
+			<field name="arch" type="xml">
+				<tree string="Bill Status">
+					<field name="invoice_no"/>
+					<field name="date"/>
+					<field name="user_id"/>
+					<field name="status"/>
+				</tree>
+			</field>
+		</record>
+
+
+		<record id="bill_status_form_123" model="ir.ui.view">
+			<field name="name">bill.status.form</field>
+			<field name="model">bill.status</field>
+			<field name="arch" type="xml">
+				<form string="Bill Status">				
+				<sheet>    
+					
+					<group>
+						<group>
+							<field name="invoice_no" domain="[('is_second_bill','=',True)]"/>
+							<field name="date"/>
+							<field name="user_id"/>
+							<field name="status"/>							
+						</group>
+						<group>
+						</group>
+					</group>
+				</sheet>
+				</form>
+			</field>
+		</record>
+
+
+		<record id="action_bill_status" model="ir.actions.act_window">
+			<field name="name">Bill Status</field>
+			<field name="res_model">bill.status</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[]</field>
+			<field name="view_id" ref="bill_status_tree"/>
+		</record>
+
+
+		<menuitem 
+				id="menu_bill_status" 
+				name="Bill Status" 
+				parent="main_menu_hiworth_boq"
+				action="action_bill_status"
+				sequence="48" />
+
+
+		<!-- Item type -->
+		<record id="item_type_tree" model="ir.ui.view">
+			<field name="name">item.type.tree</field>
+			<field name="model">item.type</field>
+			<field name="arch" type="xml">
+				<tree string="Item Type">
+					<field name="name"/>										
+				</tree>
+			</field>
+		</record>
+
+
+		<record id="item_type_form_123" model="ir.ui.view">
+			<field name="name">item.type.form</field>
+			<field name="model">item.type</field>
+			<field name="arch" type="xml">
+				<form string="Item Type">				
+				<sheet>					
+					<group>
+						<group>
+							<field name="name"/>													
+						</group>
+						<group>
+						</group>
+					</group>
+				</sheet>
+				</form>
+			</field>
+		</record>
+
+
+		<record id="action_item_type_nw" model="ir.actions.act_window">
+			<field name="name">Item Type</field>
+			<field name="res_model">item.type</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[]</field>
+			<field name="view_id" ref="item_type_tree"/>
+		</record>
+
+
+		<menuitem 
+				id="menu_item_type" 
+				name="Type" 
+				parent="main_menu_hiworth_boq"
+				action="action_item_type_nw"
+				sequence="50" />
+
+		<!-- Steel Configuration -->
+		<record id="steel_config_tree" model="ir.ui.view">
+			<field name="name">steel.config.tree</field>
+			<field name="model">steel.config</field>
+			<field name="arch" type="xml">
+				<tree string="Steel Configuration">
+					<field name="diameter"/>													
+					<field name="wgt_per_meter"/>
+				</tree>
+			</field>
+		</record>
+
+
+		<record id="steel_config_form_123" model="ir.ui.view">
+			<field name="name">steel.config.form</field>
+			<field name="model">steel.config</field>
+			<field name="arch" type="xml">
+				<form string="Steel Configuration">				
+				<sheet>					
+					<group>
+						<group>
+							<field name="diameter"/>													
+							<field name="wgt_per_meter"/>												
+						</group>
+						<group>
+						</group>
+					</group>
+				</sheet>
+				</form>
+			</field>
+		</record>
+
+
+		<record id="action_steel_config_nw" model="ir.actions.act_window">
+			<field name="name">Steel Configuration</field>
+			<field name="res_model">steel.config</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[]</field>
+			<field name="view_id" ref="steel_config_tree"/>
+		</record>
+
+
+		<menuitem 
+				id="menu_steel_config" 
+				name="Steel Configuration" 
+				parent="main_menu_hiworth_boq"
+				action="action_steel_config_nw"
+				sequence="55" />
+
+
+
+        <record id="product_normal_form_view_inherit_neww" model="ir.ui.view">
+            <field name="name">product.form.inherit.new</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <field name="purchase_ok" position="before">
+                    <field name="is_boq" invisible="1"/>
+                </field>
+            </field>
+        </record>
+
+		<record id="product_uom_view_inherit_neww111" model="ir.ui.view">
+            <field name="name">product.uom.form.inherit.new</field>
+            <field name="model">product.uom</field>
+            <field name="inherit_id" ref="product.product_uom_form_view"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="decimal_no"/>
+                </field>
+            </field>
+        </record>
+
+
+	</data>
+</openerp>

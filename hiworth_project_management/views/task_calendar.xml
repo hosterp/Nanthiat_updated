@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		<record model="ir.ui.view" id="event.view_event_search">
+			<field name="name">Events</field>
+			<field name="model">event.event</field>
+			<field name="arch" type="xml">
+				<search string="Events">
+					<field name="name" string="Events"/>
+					<filter string="Unread Messages" name="message_unread" domain="[('message_unread','=',True)]"/>
+					<separator/>
+					<filter string="Unconfirmed" name="draft" domain="[('state','=','draft')]" help="Events in New state"/>
+					<filter name="confirm" string="Confirmed" domain="[('state','=','confirm')]" help="Confirmed events"/>
+					<separator/>
+					<filter string="My Events" help="My Events" domain="[('user_id','=',uid)]"/>
+					<separator/>
+					<filter string="All Tasks" name="upcoming" domain="[('current_user','=',uid)]" help="Upcoming events from today" />
+					<filter string="Day Promised" name="promised" domain="[('date', '=', (context_today()).strftime('%%m-%%d-%%Y') )]" help="Upcoming events from today" />
+					<field name="type"/>
+					<field name="user_id"/>
+					<group expand="0" string="Group By">
+						<filter string="Responsible" context="{'group_by': 'user_id'}"/>
+						<filter string="Event Type" context="{'group_by':'type'}"/>
+						<filter string="Status" context="{'group_by':'state'}"/>
+						<filter string="Start Month" domain="[]" context="{'group_by':'date_begin'}"/>
+					</group>
+				</search>
+			</field>
+		</record>
+
+
+		<record model="ir.actions.act_window" id="event.action_event_view">
+		   <field name="name">Tasks</field>
+		   <field name="type">ir.actions.act_window</field>
+		   <field name="res_model">event.event</field>
+		   <field name="view_type">form</field>
+		   <field name="view_mode">calendar,tree,form,kanban</field>
+		   <field name="context">{"search_default_upcoming":1}</field>
+		   <field name="search_view_id" ref="event.view_event_search"/>
+		   <field name="help" type="html">
+			 <p class="oe_view_nocontent_create">
+			   Click to add a new task.
+			 </p>
+		   </field>
+		</record>
+
+		<record model="ir.ui.view" id="event.view_event_type_form">
+			<field name="name">Task type</field>
+			<field name="model">event.type</field>
+			<field name="arch" type="xml">
+				<form string="Task Type">
+					<sheet>
+						<separator string="Task Type"/>
+					<group>
+						<group>
+						<field name="name" string="Task Type"/>
+					</group>
+					<group>
+						<field name="default_reply_to" invisible="1"/>
+						<field name="default_registration_min" invisible="1"/>
+						<field name="default_email_event" domain="[('model_id.model','=','event.registration')]" invisible="1"/>
+						<field name="default_registration_max" invisible="1"/>
+						<field name="default_email_registration" domain="[('model_id.model','=','event.registration')]" invisible="1"/>
+					</group>
+				</group>
+			</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="event.view_event_type_tree">
+			<field name="name">Task Type</field>
+			<field name="model">event.type</field>
+			<field name="arch" type="xml">
+				<tree string="Task Type">
+					<field name="name" string="Task Type"/>
+				</tree>
+			</field>
+		</record>
+
+
+		<record model="ir.actions.act_window" id="event.action_event_type">
+			<field name="name">Types of Tasks</field>
+			<field name="res_model">event.type</field>
+			<field name="view_type">form</field>
+		</record>
+
+		<menuitem 
+				name="Configuration" 
+				id="event.event_configuration" 
+				parent="menu_office_management" 
+				sequence="700"/>
+
+		<menuitem 
+				name="Type of Task" 
+				id="event.menu_event_type" 
+				action="event.action_event_type" 
+				parent="event.event_configuration" 
+				groups="base.group_no_one"
+				/>
+
+
+		<record model="ir.ui.menu" id="base.marketing_menu">
+			<field name="groups_id" eval="[(6,0,[ref('hiworth_project_management.make_invisible')])]" />
+		</record>
+
+
+		<record id="view_event_event_gantt" model="ir.ui.view">
+			<field name="name">event.event.gantt</field>
+			<field name="model">event.event</field>
+			<field name="arch" type="xml">
+				<gantt date_stop="date_end" date_start="date_begin" progress="progress" string="Task" default_group_by="project_manager">
+				</gantt>
+			</field>
+		</record>
+
+
+
+		<record id="event.view_event_calendar" model="ir.ui.view">
+			<field name="name">event.event.calendar</field>
+			<field name="model">event.event</field>
+			<field eval="2" name="priority"/>
+			<field name="arch" type="xml">
+				<calendar color="type" date_start="date_begin" date_stop="date_end" date_delay="duration" string="Event Organization">
+					<field name="name"/>
+					<field name="type"/>
+				</calendar>
+			</field>
+		</record>
+
+
+		<!--<record model="ir.ui.view" id="event.view_event_form">
+			<field name="name">Tasks</field>
+			<field name="model">event.event</field>
+			&lt;!&ndash; <field name="priority" eval="18"/> &ndash;&gt;
+			<field name="arch" type="xml">
+				<form string="Tasks">
+					<header>
+						<button name="finish_task" string="Finish" type="object" class="oe_highlight" states="initial" groups="base.group_erp_manager,hiworth_project_management.group_manager,hiworth_project_management.group_employee"/>
+						<button name="button_template" string="Create Template" type="object" class="oe_highlight" states="initial" attrs="{'invisible':[('is_template','=', True)]}"/>
+						&lt;!&ndash; <button string="Confirm Task" name="button_confirm" states="draft" type="object" class="oe_highlight" groups="hiworth_project_management.group_manager,base.group_erp_manager"/> &ndash;&gt;
+						&lt;!&ndash; <button string="Finish Task" name="button_done" states="confirm" type="object" class="oe_highlight" groups="hiworth_project_management.group_manager,base.group_erp_manager"/> &ndash;&gt;
+						<button string="Set To Draft" name="button_draft" states="completed" type="object" groups="hiworth_project_management.group_manager,base.group_erp_manager"/>
+						&lt;!&ndash; <button string="Cancel Task" name="button_cancel" states="draft,confirm" type="object" groups="hiworth_project_management.group_manager,base.group_erp_manager"/> &ndash;&gt;
+						<button string="Evaluate" name="button_evaluate" states="completed" type="object" groups="hiworth_project_management.group_manager,base.group_erp_manager" confirm="Are You Sure??" class="oe_highlight"/>
+						<field name="state" widget="statusbar" statusbar_visible="initial,completed"/>
+					</header>
+					<sheet>
+						<h1><center>Task Description</center></h1><br/>
+						<h2><field name="number"/></h2>
+						<group>
+							<group>
+								<field name="template_id" domain="[('is_template', '=', True)]"/>
+								<field name="is_template" invisible="1"/>
+							</group>
+							<group>
+							</group>
+						</group>
+						<div class="oe_title">
+							<label for="issue_id" string="Issue Name" class="oe_edit_only"/>
+							<h1><field name="issue_id" attrs="{'readonly':[('state','=','completed')]}"/></h1>
+							<label for="name" string="Task Name" class="oe_edit_only"/>
+							<h1><field name="name" attrs="{'readonly':[('state','=','completed')]}"/></h1>
+						</div>
+						
+						<group name="main_field_group">
+							<group>
+								<field name="project_id" attrs="{'required':1,'readonly':[('state','=','completed')]}"/>
+								<field name="project_manager" attrs="{'readonly':[('state','=','completed')]}"/>
+								<field name="address_id" context="{'show_address': 1}" options='{"always_reload": True}' invisible="1"/>
+								<field name="organizer_id" invisible="1"/>
+								<field name="company_id" groups="base.group_multi_company"/>
+								<field name="reviewer_id" readonly="1"/>
+								<field name="civil_contractor" attrs="{'readonly':[('state','=','completed')]}" invisible="1"/>
+								<field name="current_user" attrs="{'readonly':[('state','=','completed')]}"/>
+								<field name="remarks" attrs="{'readonly':[('state','=','completed')]}"/>
+							</group>
+							<group>
+								<field name="user_id" string="Assigned To" attrs="{'readonly':[('state','=','completed')]}"/>
+								<field name="type" string="Type Of Task" attrs="{'readonly':[('state','=','completed')]}" options="{'no_create': True}"/>
+								<field name="date_begin" string="Start Time"/>
+								<field name="report_time" attrs="{'readonly':[('state','=','completed')]}" invisible="1"/>
+								<field name="date_end" string="End Time" invisible="1"/>
+								<field name="completion_time"/>
+								<field name="deadline"/>
+								<field name="date_tz" invisible="1"/>
+								<field name="date" invisible="1"/>
+								<field name="duration" invisible="1"/>
+							</group>
+						</group>
+						<group>
+						<field name="report" attrs="{'readonly':[('state','=','completed')]}"/>
+					</group>
+					<group>
+						<field name="status" invisible="1"/>
+					</group>
+					<notebook>
+						<page string="Priority" groups="base.group_erp_manager,hiworth_project_management.group_manager">
+							<group>
+							<field name="priority" widget="priority" string="Rating"/>
+						</group>
+						</page>
+					</notebook>
+					  
+					</sheet>
+					
+				</form>
+			</field>
+		</record>-->
+
+		<record model="ir.ui.view" id="event.view_event_tree">
+			<field name="name">event.event.tree</field>
+			<field name="model">event.event</field>
+			<field name="arch" type="xml">
+				<tree string="Events" >
+					<field name="project_id" string="Project Name"/>
+					<field name="name" string="Task Name"/>
+					<field name="type" string="Task Category"/>
+					<field name="civil_contractor" string="Customer"/>
+					<field name="date_begin"/>
+					<field name="date_end"/>
+					<field name="user_id" string="Assigned To"/>
+					<field name="state"/>
+					<field name="remarks"/>
+					<field name="status" invisible="1"/>
+					<field name="duration" invisible="1"/>                    
+				</tree>
+			</field>
+		</record>
+
+
+
+		<record model="ir.actions.act_window" id="event.action_event_task">
+			<field name="name">Tasks</field>
+			<field name="res_model">event.event</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,kanban,calendar,form,gantt</field>
+			<field name="search_view_id" ref="event.view_event_search"/>
+			 <field name="context">{"search_default_upcoming":1}</field>
+		</record>
+
+	   <!--  <record id="action_task_tree" model="ir.actions.act_window.view">
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="view_event_tree" />
+			<field name="act_window_id" ref="action_event_task" />
+		</record>
+
+		<record id="action_task_form" model="ir.actions.act_window.view">
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="view_event_form" />
+			<field name="act_window_id" ref="action_event_task" />
+		</record> -->
+
+
+<!--			<menuitem -->
+<!--					id="event.menu_event_event" -->
+<!--					name="Tasks"-->
+<!--					parent="menu_office_management" -->
+<!--					sequence="3"-->
+<!--			 		groups="hiworth_project_management.group_manager,hiworth_project_management.group_employee,base.group_erp_manager" -->
+<!--			 		/>-->
+
+
+<!--			<menuitem -->
+<!--					action="event.action_event_task" -->
+<!--					id="event_tasks" -->
+<!--					name="Tasks"-->
+<!--					parent="event.menu_event_event" -->
+<!--					sequence="1"-->
+<!--					groups="project.group_project_manager,hiworth_project_management.group_manager"-->
+<!--					/>-->
+
+			<record model="ir.actions.act_window" id="action_event_task_template">
+				<field name="name">Tasks</field>
+				<field name="res_model">event.event</field>
+				<field name="view_type">form</field>
+				<field name="domain">[('is_template','=',True)]</field>
+				<field name="view_mode">tree,kanban,calendar,form,gantt</field>
+				<!-- <field name="search_view_id" ref="event.view_event_search"/> -->
+				 <!-- <field name="context">{"search_default_upcoming":1}</field> -->
+			</record>
+
+<!--			<menuitem-->
+<!--					id="menu_tasks_template"-->
+<!--					name="Task"-->
+<!--					parent="main_menu_template"-->
+<!--					action="action_event_task_template"-->
+<!--					groups="project.group_project_manager,hiworth_project_management.group_manager"-->
+<!--					sequence="1"-->
+<!--					/>-->
+
+
+		<record model="ir.ui.view" id="event_personal_tasks_form">
+			<field name="name">Personal Tasks</field>
+			<field name="model">event.event</field>
+			<field name="priority" eval="17"/>
+			<field name="arch" type="xml">
+				<form string="Tasks">
+					<header>
+						<button name="finish_task" string="Finish" type="object" class="oe_highlight" states="initial" groups="base.group_erp_manager,hiworth_project_management.group_manager,hiworth_project_management.group_employee"/>
+						<!-- <button string="Confirm Task" name="button_confirm" states="draft" type="object" class="oe_highlight" groups="hiworth_project_management.group_manager,base.group_erp_manager"/>
+						<button string="Finish Event" name="button_done" states="confirm" type="object" class="oe_highlight" groups="hiworth_project_management.group_manager,base.group_erp_manager"/> -->
+						<button string="Set To Draft" name="button_draft" states="completed" type="object" groups="hiworth_project_management.group_manager,base.group_erp_manager"/>
+						<!-- <button string="Cancel Task" name="button_cancel" states="draft,confirm" type="object" groups="hiworth_project_management.group_manager,base.group_erp_manager"/> -->
+
+						<field name="state" widget="statusbar" statusbar_visible="initial,completed"/>
+					</header>
+					<sheet>
+						<h1><center>Task Description</center></h1>
+						<br/><h2><field name="number"/></h2>
+						<div class="oe_title">
+							<label for="name" string="Task Name" class="oe_edit_only"/>
+							<h1><field name="name"/></h1>
+						</div>
+						
+						<group name="main_field_group">
+							<group>
+								<field name="project_id" required="1" attrs="{'readonly':[('state','=','completed')]}"/>
+								<field name="project_manager" attrs="{'readonly':[('state','=','completed')]}"/>
+								<field name="address_id" context="{'show_address': 1}" options='{"always_reload": True}' invisible="1"/>
+								<field name="organizer_id" invisible="1"/>
+								<field name="company_id" groups="base.group_multi_company"/>
+								<field name="reviewer_id" readonly="1"/>
+								<field name="civil_contractor" attrs="{'readonly':[('state','=','completed')]}"/>
+								<field name="remarks" attrs="{'readonly':[('state','=','completed')]}"/>
+
+							</group>
+							<group>
+								<field name="user_id" string="Assigned To" attrs="{'readonly':[('state','=','completed')]}"/>
+								<field name="type" string="Type Of Task" options="{'no_create': True}" attrs="{'readonly':[('state','=','completed')]}"/>
+								<field name="date_begin" string="Start Time" attrs="{'readonly':[('state','=','completed')]}"/>
+								<field name="report_time" attrs="{'readonly':[('state','=','completed')]}"/>
+								<field name="date_end" string="End Time" attrs="{'readonly':[('state','=','completed')]}"/>
+								<field name="date_tz" invisible="1"/>
+								<field name="completion_time" />
+								<field name="date" invisible="1"/>
+								<field name="duration" invisible="1"/>
+								<field name="update_sel" invisible="1"/>
+								<field name="update" invisible="1"/>
+							</group>
+						</group>
+						<group>
+						<field name="report" attrs="{'readonly':[('state','=','completed')]}"/>
+					</group>
+					<group>
+						<button name="send_work_report" string="Send Report" class="oe_highlight" groups="hiworth_project_management.group_manager,base.group_erp_manager,hiworth_project_management.group_employee" type="object"/>
+						</group>
+						<group>
+							<field name="status" invisible="1"/>
+					</group>
+					  
+					</sheet>
+					
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="event_personal_task_tree">
+			<field name="name">event.event.scheduled.tree</field>
+			<field name="model">event.event</field>
+			<field name="arch" type="xml">
+				<tree string="Events">
+					<field name="project_id" string="Project Name"/>
+					<field name="name" string="Task Name"/>
+					<field name="type" string="Task Category"/>
+					<field name="civil_contractor" string="Customer"/>
+					<field name="date_begin"/>
+					<field name="date_end"/>
+					<field name="state"/>
+					<field name="remarks"/>
+					<field name="status" invisible="1"/>
+					<field name="duration" invisible="1"/>
+					
+				</tree>
+			</field>
+		</record>
+
+
+	   <record model="ir.actions.act_window" id="action_personal_event_task">
+			<field name="name">Personal Tasks</field>
+			<field name="res_model">event.event</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,kanban,calendar,form,gantt</field>
+			<field name="domain">[('user_id','=',uid)]</field>
+		</record>
+
+		<record id="action_personal_task_tree" model="ir.actions.act_window.view">
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="event_personal_task_tree" />
+			<field name="act_window_id" ref="action_personal_event_task" />
+		</record>
+
+		<record id="action_personal_task_form" model="ir.actions.act_window.view">
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="event_personal_tasks_form" />
+			<field name="act_window_id" ref="action_personal_event_task" />
+		</record>
+
+
+
+
+
+<!--		<menuitem action="action_personal_event_task" id="menu__perosnal_event_event" name="Self Tasks"-->
+<!--			parent="event.menu_event_event" sequence="2"-->
+<!--			groups="project.group_project_manager,hiworth_project_management.group_manager,hiworth_project_management.group_employee"/>-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			  <record model="ir.ui.view" id="event_daily_tasks_form">
+			<field name="name">Day Abstract</field>
+			<field name="model">event.event</field>
+			<field name="priority" eval="19"/>
+			<field name="arch" type="xml">
+				<form string="Tasks">
+					<header>
+						<field name="state" widget="statusbar" invisible="1"/>
+					</header>
+					<sheet>
+						<h1><center>Task Description</center></h1>
+						<br/><h2><field name="number"/></h2>
+						<div class="oe_title">
+							<label for="name" string="Task Name" class="oe_edit_only"/>
+							<h1><field name="name"/></h1>
+						</div>
+						
+						<group name="main_field_group">
+							<group>
+								<field name="project_id" required="1" attrs="{'readonly':[('state','=','completed')]}"/>
+								<field name="project_manager" attrs="{'readonly':[('state','=','completed')]}"/>
+								<field name="address_id" context="{'show_address': 1}" options='{"always_reload": True}' invisible="1"/>
+								<field name="organizer_id" invisible="1"/>
+								<field name="company_id" groups="base.group_multi_company"/>
+								<field name="reviewer_id" readonly="1" />
+								<field name="civil_contractor" attrs="{'readonly':[('state','=','completed')]}"/>
+								<field name="remarks" attrs="{'readonly':[('state','=','completed')]}"/>
+
+							</group>
+							<group>
+								<field name="user_id" string="Assigned To" attrs="{'readonly':[('state','=','completed')]}"/>
+								<field name="type" string="Type Of Task" options="{'no_create': True}" attrs="{'readonly':[('state','=','completed')]}"/>
+								<field name="date_begin" string="Start Time" attrs="{'readonly':[('state','=','completed')]}"/>
+								<field name="report_time" attrs="{'readonly':[('state','=','completed')]}"/>
+								<field name="date_end" string="End Time" attrs="{'readonly':[('state','=','completed')]}"/>
+								<field name="completion_time"/>
+								<field name="date_tz" invisible="1"/>
+								<field name="date" invisible="1"/>
+								<field name="duration" invisible="1"/>
+							</group>
+						</group>
+						<group>
+						<field name="report" attrs="{'readonly':[('state','=','completed')]}"/>
+					</group>
+					<group>
+						<field name="status" invisible="1"/>
+					</group>
+					  
+					</sheet>
+					
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="event_daily_task_tree">
+			<field name="name">event.event.day.tree</field>
+			<field name="model">event.event</field>
+			<field name="arch" type="xml">
+				<tree string="Events" colors="red:status == 'initial';green:status == 'completed' ">
+					<field name="civil_contractor" string="Client Name"/>
+					<field name="project_id" string="Project Name"/>
+					<field name="project_manager" string="Project Manager"/>
+					<field name="user_id" string="Assigned To" groups="hiworth_project_management.group_manager"/>
+					<field name="report_time"/>
+					
+					<field name="name" string="Task Name"/>
+					<field name="date_end"/>
+					<field name="state" invisible="1"/>
+					<field name="state"/>
+					<field name="status" invisible="1"/>
+					<field name="date"/>
+					<field name="duration" invisible="1"/>
+					
+				</tree>
+			</field>
+		</record>
+
+
+
+
+
+
+
+
+
+
+		<record model="ir.actions.act_window" id="action_daily_abstract_task">
+			<field name="name">Day Abstract</field>
+			<field name="res_model">event.event</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,kanban,calendar,form,gantt</field>
+			<field name="context">{"search_default_promised":1}</field>
+			<field name="domain">[]</field>
+		</record>
+
+		<record id="action_daily_tree" model="ir.actions.act_window.view">
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="event_daily_task_tree" />
+			<field name="act_window_id" ref="action_daily_abstract_task" />
+		</record>
+
+		<record id="action_daily_form" model="ir.actions.act_window.view">
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="event_daily_tasks_form" />
+			<field name="act_window_id" ref="action_daily_abstract_task" />
+		</record>
+
+		<!-- <menuitem action="action_daily_abstract_task" id="menu__daily_event_event" name="Day Abstract"
+			parent="event.menu_event_event" sequence="5"
+			groups="project.group_project_manager,hiworth_project_management.group_manager,hiworth_project_management.group_employee"/> -->
+
+
+		<record id="demo_active" model="event.type">
+			<field name="name">Active</field>
+		</record>
+		<record id="demo_passive" model="event.type">
+			<field name="name">Passive</field>
+		</record>
+		<record id="demo_silent" model="event.type">
+			<field name="name">Silent</field>
+		</record>
+
+</data>
+</openerp>

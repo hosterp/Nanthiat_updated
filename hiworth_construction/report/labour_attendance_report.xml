@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+		<!-- Material request report wizard -->
+		<record id="form_labour_attendance_report" model="ir.ui.view">
+			<field name="name">Attendance Report</field>
+			<field name="model">labour.attendance.report</field>
+			<field name="arch" type="xml">
+				<form>
+					<group>
+						<group>
+							<field name="from_date" />
+						</group>
+						<group>
+							<field name="to_date" />
+						</group>
+						<group>
+							<field name ="location_id" domain="[('usage','=','internal')]"/>
+						</group>
+						<group>
+							<field name ="category_id"/>
+						</group>
+					</group>
+					<footer>
+						<button type="object" name="view_labour_attendance_report"
+							string="View" class="oe_highlight" />
+						<button type="object" name="print_labour_attendance_report"
+							string="Print" class="oe_highlight" />
+						<button special="cancel" string="Cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+		<record id="action_labour_attendance_report" model="ir.actions.act_window">
+			<field name="name">Attendance Report</field>
+			<field name="res_model">labour.attendance.report</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+
+		<menuitem
+				id="menu_labour_atte_report_nanthiat"
+				parent="hiworth_project_management.menu_work_report"
+				action="action_labour_attendance_report"
+				name="Labour Attendance Report"
+				sequence="2"
+				/>
+
+		
+
+		<report id="labour_attendance_report" string="Labour Attendance Report"
+		model="labour.attendance.report" report_type="qweb-pdf"
+		name="hiworth_construction.report_labour_attendance_trmplate_view" />
+
+		<report id="labour_attendance_report" string="Labour Attendance Report"
+		model="labour.attendance.report" report_type="qweb-html"
+		name="hiworth_construction.report_labour_attendance_trmplate_view" />
+
+		<template id="report_labour_attendance_trmplate_view">
+			<t t-call="report.html_container">
+				<t t-call="report.external_layout">
+					<div class="page">
+						<t t-foreach="docs" t-as="o">
+							<div class = 'col-xs 12' style="font-size:20px">
+								<center>
+								<p>Labour Attendance Report</p>
+								</center>
+							</div>
+							<table class="table table-bordered">
+								<tr>
+									<td>Sl.No</td>
+									<td>Category</td>
+									<td>Date</td>
+									<td>Project</td>
+									<td>Site</td>
+									<td>Name of Worker</td>
+									<td>wage</td>
+									<td>Allowance</td>
+									<td>Total</td>
+								</tr>
+							<t t-set="total_amount" t-value="0" />
+							<t t-set="sl_no" t-value="0"/>
+							<!-- <t t-foreach="o.get_labour_attendance()" t-as="line"> -->
+								<t t-foreach="o.get_labour_category()" t-as="listy">
+									<t t-foreach="listy.line_ids" t-as="lines">
+
+								<tr>
+									<td><span t-esc="sl_no"/></td>
+									<td><span t-esc="listy.category_id.name"/></td>
+									<td><span t-esc="listy.attendance_id.date"/></td>
+									<td><span t-esc="listy.attendance_id.project_id.name"/></td>
+									<td><span t-esc="listy.attendance_id.location_ids.name"/></td>
+									<td><span t-esc="lines.name_of_worker.name"/></td>
+									<td><span t-esc="lines.wage"/></td>
+									<td><span t-esc="lines.allowance"/></td>
+									<td><span t-esc="lines.total"/></td>
+									<t t-set="sl_no" t-value="sl_no+1"/>
+									<t t-set="total_amount" t-value="total_amount+lines.total"/>
+								</tr>
+
+							</t>
+							</t>
+						
+						<tr >
+								<td colspan ="9" align="right"> Total : <span t-esc="total_amount"/></td>
+								</tr>
+						</table>
+
+						</t>
+					</div>
+				</t>
+			</t>
+		</template>
+						
+
+	</data>
+</openerp>

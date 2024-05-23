@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_purchase_details_wizard_form" model="ir.ui.view">
+            <field name="name">view_purchase_details_form</field>
+            <field name="model">purchase.report.details.wizard</field>
+            <field name="arch" type="xml">
+                <form string="My Wizard Title">
+                    <sheet>
+                        <group col="2">
+                            <group>
+                                <field name="from_date" string="Date From"/>
+                                <field name="to_date" string="Date To"/>
+
+                            </group>
+                            <group>
+                                <field name="partner_id"/>
+                                <field name="status"/>
+                            </group>
+                        </group>
+
+                    </sheet>
+                    <footer>
+                        <button name="print_purchase_details_report" string="Print" type="object" class="oe_highlight"/>
+                        <button name="view_purchase_details_report" string="View" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <template id="external_layout_header_inherit_purchase">
+            <div class="header">
+                <div class="row">
+                    <div class="col-xs-12 text-center">
+                        <t t-if="company and company.logo">
+                            <img t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 80px;"/>
+                        </t>
+                    </div>
+                </div>
+                <div class="col-xs-12 text-center" style="font-size: 20px; margin-top: 10px;">
+                    <div style="border-style: solid;">
+                        <b>Purchase Details</b>
+                    </div>
+                </div>
+                <div class="row zero_min_height">
+                    <div class="col-xs-12" align="center">
+                        <div style="width: 18%; border-bottom: 1px solid black;"></div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!--        .............................................Template.................................................................#-->
+        <template id="report_purchase_details_template_view">
+            <t t-call="report.html_container">
+                <t t-call="report.external_layout">
+                    <div class="page">
+
+                        <t t-foreach="docs" t-as="o">
+                            <t t-call="hiworth_construction.external_layout_header_inherit_purchase"/>
+                            <br></br>
+                            <table class="table table-bordered">
+                                <tr>
+                                    <td>Date From :
+                                        <span t-field="o.from_date"/>
+                                    </td>
+                                    <td>Date To :
+                                        <span t-field="o.to_date"/>
+                                    </td>
+                                    <td>
+                                        <Supplier>Supplier</Supplier>
+                                        :
+                                        <span t-field="o.partner_id.name"/>
+                                    </td>
+
+                                </tr>
+                            </table>
+                            <table class="table table-bordered">
+                                <tr>
+                                    <td>
+                                        <b>Date</b>
+                                    </td>
+                                    <td>
+                                        <b>Product</b>
+                                    </td>
+                                    <td>
+                                        <b>Total</b>
+                                    </td>
+                                </tr>
+                                <t t-set="total_amount" t-value="0"/>
+                                <t t-foreach="o.get_purchase_products()[0]" t-as="line">
+                                    <tr>
+                                        <td>
+                                            <span t-esc="line['invoice_date'][8:10] + '-' + line['invoice_date'][5:7] + '-' + line['invoice_date'][0:4]"/>
+                                        </td>
+                                        <td>
+                                            <t t-set="product_names" t-value="''"/>
+                                            <t t-foreach="line.order_line" t-as="order_line">
+                                                <t t-set="product_names"
+                                                   t-value="product_names + order_line.product_id.name + ', '"/>
+                                            </t>
+                                            <span t-esc="product_names[:-2]"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="line.amount_total"/>
+                                        </td>
+
+                                    </tr>
+                                    <t t-set="total_amount" t-value="total_amount+line.amount_total"/>
+                                </t>
+                                <tr>
+                                    <td colspan="2" style="text-align: right;">
+                                        <strong>Total:</strong>
+                                    </td>
+                                    <td>
+                                        <span t-esc="total_amount"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <!--        .......................................................................................................................-->
+        <report id="purchase_details_report_print" string="Purchase Report"
+                model="purchase.report.details.wizard" report_type="qweb-pdf"
+                name="hiworth_construction.report_purchase_details_template_view"/>
+        <report id="view_purchase_details_report_print" string="Purchase Report"
+                model="purchase.report.details.wizard" report_type="qweb-pdf"
+                name="hiworth_construction.report_purchase_details_template_view"/>
+
+        <record id="action_purchase_details_wizard_form" model="ir.actions.act_window">
+            <field name="name">View Purchase Details Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.report.details.wizard</field>
+            <field name="target">new</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_purchase_details_wizard_form"/>
+        </record>
+        <menuitem action="action_purchase_details_wizard_form" id="menu_purchase_form_details"
+                  parent="purchase.menu_procurement_management" name="View Purchase Details" sequence="170"/>
+    </data>
+</openerp>

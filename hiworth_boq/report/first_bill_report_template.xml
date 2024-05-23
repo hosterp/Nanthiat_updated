@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="report_first_bill">
+    <t t-call="report.html_container">
+		<t t-foreach="docs" t-as="o">
+			<t t-call="report.external_layout">
+				<div class="page">
+					<center><b><h2><t t-if="o.bill_name"><span t-field="o.bill_name"/></t></h2></b></center>
+					<table class="table table-bordered"  style="width: 100%">
+						<thead>
+							<tr>
+								<td colspan="10"><strong><center>Name of Work: <t t-if="o.project_id"><span t-field="o.project_id.name"/></t></center></strong></td>
+							</tr>
+							<tr>
+								<td colspan="5"><strong>Name of Contractor: <t t-if="o.boq_ref_id.bidder_name"><span t-field="o.boq_ref_id.bidder_name.name"/></t></strong></td>
+								<td colspan="5"><strong>Agt:No: <t t-if="o.boq_ref_id.agent_no"><span t-field="o.boq_ref_id.agent_no"/></t>Date:<t t-if="o.date_invoice"><span t-field="o.date_invoice"/></t></strong></td>
+							</tr>							
+							<tr></tr>
+							<tr></tr>
+							<tr>
+								<td>Sl No.</td>
+								<td>Description</td>
+								<td>No.</td>
+								<td>L</td>
+								<td>B</td>
+								<td>D</td>
+								<td>Qty.</td>
+								<td>Unit</td>
+								<td>Rate</td>
+								<td>Amount</td>
+							</tr>							
+						</thead>
+						<tbody>
+							<t t-foreach="o.invoice_line" t-as="line">
+								<tr>
+									<td><span t-field="line.sl_no" />
+									</td>							
+									<td><span t-field="line.product_id.name"/></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+											
+								<!-- <t t-set="l_tot" t-value="0"/>
+								<t t-set="no_tot" t-value="0"/>			
+								<t t-set="b_tot" t-value="0"/>
+								<t t-set="d_tot" t-value="0"/> -->		
+								<t t-set="qty_tot1" t-value="0"/>	
+
+								<t t-foreach="line.boq_ids" t-as="res">										
+									<tr>
+										<td></td>		
+										<td><span t-field="res.name"/></td>
+										<td><span t-field="res.no"/></td>
+										<td><span t-field="res.l"/></td>
+										<td><span t-field="res.b"/></td>
+										<td><span t-field="res.d"/></td>
+										<td><span t-esc="'{0:,.3f}'.format(res.qty)"/></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<!-- <t t-set="l_tot" t-value="l_tot+res.l_avg"/>
+										<t t-set="no_tot" t-value="no_tot+res.no"/>
+										<t t-set="b_tot" t-value="b_tot+res.b_avg"/>
+										<t t-set="d_tot" t-value="d_tot+res.d_avg"/> -->
+										<t t-set="qty_tot1" t-value="qty_tot1+res.qty"/>
+									</tr>
+								</t>
+
+								<t t-set="qty_tot2" t-value="0"/>	
+
+								<t t-foreach="line.steel_ids" t-as="rec">										
+									<tr>
+										<td></td>		
+										<td><span t-field="rec.name"/></td>
+										<td><span t-field="rec.no"/></td>
+										<td><span t-field="rec.length"/></td>
+										<td><span t-field="rec.qty_in_meter"/></td>
+										<td></td>
+										<td><span t-esc="'{0:,.3f}'.format(rec.qty)"/></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<!-- <t t-set="no_tot" t-value="no_tot+rec.no"/>
+										<t t-set="l_tot" t-value="l_tot+rec.l_avg"/>
+										<t t-set="b_tot" t-value="b_tot+rec.b_avg"/>
+										<t t-set="d_tot" t-value="d_tot+rec.d_avg"/> -->
+										<t t-set="qty_tot2" t-value="qty_tot2+rec.qty"/>
+									</tr>
+								</t>								
+								<t t-set="qty_tot" t-value="qty_tot1+qty_tot2"/>
+								<tr>
+									<td></td>
+									<td><strong>Total</strong></td>
+									<!-- <td><span t-esc="no_tot"/></td>
+									<td><span t-esc="'{0:,.2f}'.format(l_tot)"/></td>
+									<td><span t-esc="'{0:,.2f}'.format(b_tot)"/></td>
+									<td><span t-esc="'{0:,.2f}'.format(d_tot)"/></td> -->
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td><span t-esc="'{0:,.3f}'.format(qty_tot)"/></td>
+									<td><span t-field="line.uos_id.name"/></td>
+									<td><span t-esc="'{0:,.2f}'.format(o.amount_untaxed)"/></td>
+									<td><span t-esc="'{0:,.2f}'.format(o.amount_total)"/></td>
+								</tr>
+						
+							</t>
+						</tbody>					
+					</table>				
+	               
+				</div>
+			</t>
+		</t>
+	</t>
+</template>
+</data>
+</openerp>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		<record id="payment_approvals_tree" model="ir.ui.view">
+			<field name="name">payment.approvals.tree</field>
+			<field name="model">payment.approvals</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="total_requested"/>
+					<field name="total_approved"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="payment_approvals_form" model="ir.ui.view">
+			<field name="name">payment.approvals.form</field>
+			<field name="model">payment.approvals</field>
+			<field name="arch" type="xml">
+				<form>
+					<header>
+						<button name="approve" string="Approve" class="oe_highlight" type="object" states="draft"/>
+						<field name="state" widget="statusbar"/>
+					</header>
+					<sheet>
+						<group>
+							<field name="type" attrs="{'readonly':[('state', '=', 'approved')]}"/>
+						</group>
+						<notebook>
+							<page string="Approvals">
+								<field name="payment_approval_line" attrs="{'readonly':[('state', '=', 'approved')]}">
+									<tree editable="bottom">
+										<field name="approval_id" invisible="1"/>
+										<field name="supplier_id" readonly="1"/>
+										<field name="account_id"/>
+										<field name="project_id"/>
+										<field name="amount"/>
+										<field name="current_balance"/>
+										<field name="amount_approved"/>
+										<field name="updated_balance"/>
+										<field name="narration"/>
+										<button name="get_data" string="View" type="object"/>
+									</tree>
+								</field>
+							</page>
+						</notebook>
+						<group>
+							<group>
+								<field name="total_requested" attrs="{'readonly':[('state', '=', 'approved')]}"/>
+							</group>
+							<group>
+								<field name="total_approved" attrs="{'readonly':[('state', '=', 'approved')]}"/>
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_payment_approvals" model="ir.actions.act_window">
+			<field name="name">Payment Approvals</field>
+			<field name="res_model">payment.approvals</field>
+			<field name="target">new</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+		</record>
+
+		<record id="action_payment_approved" model="ir.actions.act_window">
+			<field name="name">Payment Approved</field>
+			<field name="res_model">payment.approvals</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem
+				name="Payment Approvals" id="menu_payment_approvalst" parent="menu_hiworth_finance_root"
+				sequence="52"/>
+
+		<menuitem
+				name="Approve Payments" id="menu_sub_payment_approvals" parent="menu_payment_approvalst"
+				sequence="9" action="action_payment_approvals"/>
+
+		<menuitem
+				name="Approved Payments" id="menu_sub_payment_approvaed" parent="menu_payment_approvalst"
+				sequence="9" action="action_payment_approved"/>
+
+	</data>
+</openerp>

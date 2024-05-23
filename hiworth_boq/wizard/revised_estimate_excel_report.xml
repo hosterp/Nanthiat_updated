@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_revised_estimate_excel_report" model="ir.ui.view">
+            <field name="name">revised.estimate.xlsx.report</field>
+            <field name="model">revised.estimate.xlsx.report</field>
+            <field name="arch" type="xml">
+                <form string="Revised Estimate Excel">
+                    <group>
+                        <group>  
+                            <field name="boq_id"/>
+                        </group>
+                        <group>
+                        </group>                     
+                    </group>
+                    <footer>                        
+                        <button name="generate_xls_report" string="Print Excel Report" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="oe_highlight" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_revised_estimate_excel_report" model="ir.actions.act_window">
+        <field name="name">Revised Estimate Excel Report</field>
+        <field name="res_model">revised.estimate.xlsx.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_revised_estimate_excel_report"/>
+        <field name="target">new</field>
+        </record>
+       
+        <menuitem 
+            id="main_menu_revised_estimate_sub1" 
+            name="RE Excel" 
+            parent="hiworth_boq.main_menu_hiworth_first_bill"
+            action="action_revised_estimate_excel_report"
+            sequence="2" />
+       
+
+        <report
+            id="revised_estimate_excel_report"
+            model="revised.estimate.xlsx.report"
+            string="RE Excel"
+            report_type="xlsx"
+            name="custom.revised_estimate_report.xlsx"
+            file="custom.revised_estimate_report.xlsx"
+            menu="True"            
+        />
+        
+    </data>
+
+
+</openerp>

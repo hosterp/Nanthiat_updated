@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_first_bill_excel_report1" model="ir.ui.view">
+            <field name="name">first.bill.xlsx.report1</field>
+            <field name="model">first.bill.xlsx.report1</field>
+            <field name="arch" type="xml">
+                <form string="First Bill Excel">
+                    <group>
+                        <group>  
+                            <field name="invoice_no"/>
+                        </group>
+                        <group>
+                        </group>                     
+                    </group>
+                    <footer>                        
+                        <button name="generate_xls_report" string="Print Excel Report" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="oe_highlight" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_first_bill_excel_report1" model="ir.actions.act_window">
+        <field name="name">First Bill Excel Report</field>
+        <field name="res_model">first.bill.xlsx.report1</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_first_bill_excel_report1"/>
+        <field name="target">new</field>
+        </record>
+       
+        <!-- Excel Report Main Menu -->
+        <menuitem 
+                id="main_menu_hiworth_first_bill" 
+                parent="hiworth_construction.menu_hiworth_finance_root"
+                name="Excel Report" 
+                sequence="2"/>
+
+        <menuitem 
+                id="main_menu_firstbill_sub1" 
+                name="First Bill Excel" 
+                parent="hiworth_boq.main_menu_hiworth_first_bill"
+                action="action_first_bill_excel_report1"
+                sequence="1" />
+       
+
+        <report
+            id="first_excel_report"
+            model="first.bill.xlsx.report1"
+            string="First Bill Excel"
+            report_type="xlsx"
+            name="custom.first_bill_report.xlsx"
+            file="custom.first_bill_report.xlsx"
+            menu="True"            
+        />
+        
+    </data>
+
+
+</openerp>

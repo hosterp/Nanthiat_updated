@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		<record id="view_job_summary_tree" model="ir.ui.view">
+			<field name="name">job.summary.tree</field>
+			<field name="model">job.summary</field>
+			<field name="arch" type="xml">
+				<tree create="false">
+					<field name="date_today"/>
+					<field name="user_id"/>
+					<field name="name"/>
+					<field name="status"/>
+					<field name="remarks"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_job_summary_form" model="ir.ui.view">
+			<field name="name">job.summary.form</field>
+			<field name="model">job.summary</field>
+			<field name="arch" type="xml">
+				<form create="false" edit="false" delete="false">
+					<sheet>
+						<h1><center>Employee Report</center></h1>
+						<group>
+							<field name="date_today"/>
+							<field name="user_id"/>
+							<field name="name"/>
+							<field name="status" />
+							<field name="remarks" />
+							<field name="task_entry" invisible="1"/>
+							<field name="project_task" invisible="1"/>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="view_wizard_job_summary_form" model="ir.ui.view">
+			<field name="name">job.summary.wizard.form</field>
+			<field name="model">job.summary.wizard</field>
+			<field name="arch" type="xml">
+				<form>
+					<h1><center>Employee Report</center></h1>
+					<group col="4">
+						<field name="date_from"/>
+						<field name="date_to"/>
+					</group>
+					<group>
+						<field name="employee" options="{'no_create': True}" domain="[('contractor','=',False),('is_cus','=',False)]"/>
+					</group>
+					<footer>
+                        <button name="confirm_date" string="View" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="action_job_summary">
+            <field name="name">Employee Report</field>
+            <field name="res_model">job.summary.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="view_wizard_job_summary_form"/>
+            <field name="target">new</field>
+            <field name="view_mode">form</field>
+            <!-- <field name="view_mode">tree,form</field> -->
+            <field name="domain">[]</field>
+        </record>
+
+
+       
+		<!-- <menuitem name="Job Summary" id="menu_job_summary" parent="sub_menu_office_management" action="action_job_summary" sequence="20" groups="hiworth_project_management.group_manager,base.group_erp_manager,hiworth_project_management.group_employee"/>
+ -->
+
+</data>
+</openerp>

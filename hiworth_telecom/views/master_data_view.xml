@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>	
+
+		<!-- Master Data -->
+		<record id="master_data_tree" model="ir.ui.view">
+			<field name="name">master.data.tree</field>
+			<field name="model">master.data</field>
+			<field name="arch" type="xml">
+				<tree string="Master Data" create="false">
+					<field name="allotment_type"/>	
+					<field name="project_id"/>	
+					<field name="indus_id"/>	
+					<field name="site_name"/>	
+					<field name="work_type"/>
+					<field name="requested_opco"/>	
+					<field name="work_allotted_date"/>	
+					<field name="aging_to_start"/>
+					<field name="wcc_status_electrical"/>
+					<field name="wcc_status_civil"/>
+					<field name="overall_status"/>
+					<field name="work_completion_date"/>
+				</tree>
+			</field>
+		</record>
+
+
+		<record id="master_data_form_123" model="ir.ui.view">
+			<field name="name">master.data.form</field>
+			<field name="model">master.data</field>
+			<field name="arch" type="xml">
+				<form string="Master Data" create="false">
+				<sheet>					
+					<group>
+						<group>
+							<field name="allotment_type"/>	
+							<field name="project_id"/>	
+							<field name="indus_id"/>	
+							<field name="site_name"/>
+							<field name="electrical_po"/>
+							<field name="civil_po"/>
+							<field name="fse"/>
+							<field name="site_tech_name"/>
+							<field name="contract_number"/>
+							<field name="lat"/>
+							<field name="log"/>
+							<field name="work_type"/>
+							<field name="requested_opco"/>
+							<field name="anchor_opco"/>	
+							<field name="pr_value_electrical"/>	
+							<field name="pr_value_civil"/>	
+							<field name="qty_amendment_electrical"/>	
+							<field name="qty_amendment_civil"/>	
+							<field name="line_addition_electrical"/>	
+							<field name="line_addition_civil"/>	
+							<field name="wcc_status_electrical"/>	
+							<field name="wcc_status_civil"/>
+							<field name="invoice_status_electrical"/>	
+							<field name="invoice_status_civil"/>	
+							<field name="inv_amt_electrical"/>
+							<field name="inv_amt_civil"/>	
+							<field name="payment_sts_electrical"/>	
+							<field name="payment_sts_civil"/>	
+							<field name="total_received_amt"/>
+						</group>
+						<group>
+							<field name="district"/>
+							<field name="work_allotted_date"/>
+							<field name="site_supervisor"/>
+							<field name="sub_contractor"/>
+							<field name="work_started_date"/>
+							<field name="aging_to_start" readonly="1"/>
+							<field name="work_status_electrical"/>
+							<field name="work_status_civil"/>
+							<field name="overall_status"/>
+							<field name="work_completion_date"/>	
+							<field name="aging_to_completion" readonly="1"/>
+							<field name="m_sheet_status"/>
+							<field name="dg"/>	
+							<field name="stabilizer"/>	
+							<field name="sps_amf_piu_sp"/>	
+							<field name="battery_bank"/>	
+							<field name="bb_cabinet"/>	
+							<field name="smps"/>	
+							<field name="modules"/>	
+							<field name="aircon"/>	
+							<field name="dc_converter"/>	
+							<field name="txn_rack"/>
+							<field name="dcem"/>	
+							<field name="od_plinth"/>								
+						</group>
+					</group>
+				</sheet>
+				</form>
+			</field>
+		</record>
+
+
+		<record id="action_master_data_nw" model="ir.actions.act_window">
+			<field name="name">Master Data</field>
+			<field name="res_model">master.data</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[]</field>
+			<field name="view_id" ref="master_data_tree"/>
+		</record>
+
+
+		
+
+		<menuitem
+				id="master_data_menu"
+				name="Master Data"
+				parent="main_menu_telecom_sub"
+				action="action_master_data_nw"
+				sequence="3" />
+	  
+	</data>
+</openerp>

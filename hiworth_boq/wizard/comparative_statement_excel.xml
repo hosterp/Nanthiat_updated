@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_comparative_statement_excel_report" model="ir.ui.view">
+            <field name="name">comparative.statement.xlsx.report</field>
+            <field name="model">comparative.statement.xlsx.report</field>
+            <field name="arch" type="xml">
+                <form string="comparative Statement Excel">
+                    <group>
+                        <group>  
+                            <field name="boq_id"/>
+                        </group>
+                        <group>
+                        </group>                     
+                    </group>
+                    <footer>                        
+                        <button name="generate_xls_report" string="Print Excel Report" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="oe_highlight" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_cs_excel_report" model="ir.actions.act_window">
+        <field name="name">Comparative Statement Excel Report</field>
+        <field name="res_model">comparative.statement.xlsx.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_comparative_statement_excel_report"/>
+        <field name="target">new</field>
+        </record>
+       
+       
+        <menuitem 
+                id="main_menu_cs_sub1" 
+                name="Comparative Statement Excel" 
+                parent="hiworth_boq.main_menu_hiworth_first_bill"
+                action="action_cs_excel_report"
+                sequence="3" />
+       
+
+        <report
+            id="cs_excel_report"
+            model="comparative.statement.xlsx.report"
+            string="Comparative Statement Excel"
+            report_type="xlsx"
+            name="custom.comparative_statement_report.xlsx"
+            file="custom.comparative_statement_report.xlsx"
+            menu="True"            
+        />
+        
+    </data>
+
+
+</openerp>

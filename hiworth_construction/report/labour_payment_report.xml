@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_labour_payment_wizard_form" model="ir.ui.view">
+            <field name="name">view_labour_payment_form</field>
+            <field name="model">labour.payment.report</field>
+            <field name="arch" type="xml">
+                <form string="My Wizard Title">
+                    <sheet>
+                        <group col="2">
+                            <group>
+                                <field name="from_date" string="Date From"/>
+                                <field name="to_date" string="Date To"/>
+
+                            </group>
+                            <group>
+                                <field name="category_id"/>
+                                <field name="project_id" string="Project"/>
+                            </group>
+                        </group>
+
+                    </sheet>
+                    <footer>
+                        <button name="print_labour_payment_details_report" string="Print" type="object"
+                                class="oe_highlight"/>
+                        <button name="view_labour_payment_details_report" string="View" type="object"
+                                class="oe_highlight"/>
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <template id="external_layout_header_inherit_labour_payment_details">
+            <div class="header">
+                <div class="row">
+                    <div class="col-xs-12 text-center">
+                        <t t-if="company and company.logo">
+                            <img t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 80px;"/>
+                        </t>
+                    </div>
+                </div>
+                <div class="col-xs-12 text-center" style="font-size: 20px; margin-top: 10px;">
+                    <div style="border-style: solid;">
+                        <b>Labour Payment Details</b>
+                    </div>
+                </div>
+                <div class="row zero_min_height">
+                    <div class="col-xs-12" align="center">
+                        <div style="width: 18%; border-bottom: 1px solid black;"></div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <!--        .............................................Template.................................................................#-->
+        <template id="report_labour_payment_details_template_view">
+            <t t-call="report.html_container">
+                <t t-call="report.external_layout">
+                    <div class="page">
+
+                        <t t-foreach="docs" t-as="o">
+                            <t t-call="hiworth_construction.external_layout_header_inherit_labour_payment_details"/>
+                            <br></br>
+                            <table class="table table-bordered">
+                                <tr>
+                                    <td>Date From :
+                                        <span t-field="o.from_date"/>
+                                    </td>
+                                    <td>Date To :
+                                        <span t-field="o.to_date"/>
+                                    </td>
+                                    <td>Category:
+                                        <span t-field="o.category_id"/>
+                                    </td>
+                                    <td>Project:
+                                        <span t-field="o.project_id"/>
+                                    </td>
+
+
+                                </tr>
+                            </table>
+                            <table class="table table-bordered">
+                                <tr>
+                                    <td>
+                                        <b>Date</b>
+                                    </td>
+                                    <td>
+                                        <b>
+                                            Name of Worker
+                                        </b>
+                                    </td>
+                                    <td>
+                                        <b>Grade</b>
+                                    </td>
+                                    <td>
+                                        <b>Item of Work Engaged</b>
+                                    </td>
+                                    <td>
+                                        <b>
+                                            Detail of Work
+                                        </b>
+                                    </td>
+<!--                                    <td>-->
+<!--                                        <b>-->
+
+<!--                                            Attendance-->
+<!--                                        </b>-->
+<!--                                    </td>-->
+                                    <td>
+                                        <b>
+
+                                            Wage
+                                        </b>
+                                    </td>
+                                    <td>
+                                        <b>
+
+                                            Allowance
+                                        </b>
+                                    </td>
+                                    <td>
+                                        <b>
+                                            Total
+                                        </b>
+                                    </td>
+                                </tr>
+                                    <t t-set="total_amount" t-value="0"/>
+                                    <t t-foreach="o.get_labour_payment_products()" t-as="line">
+                                        <tr>
+                                            <td>
+<!--                                                <span t-esc="line.date"/>-->
+                                                <span t-esc="line['date'][8:10] + '-' + line['date'][5:7] + '-' + line['date'][0:4]"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="line.name_of_worker.name"/>
+                                            </td>
+
+                                            <td>
+                                                <span t-esc="line.grade"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="line.item_of_work.name"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="line.detail_of_work"/>
+                                            </td>
+<!--                                            <td>-->
+<!--                                                <span t-esc="line.attendance"/>-->
+<!--                                            </td>-->
+                                            <td>
+                                                <span t-esc="line.wage"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="line.allowance"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="line.total"/>
+                                            </td>
+
+                                        </tr>
+                                        <t t-set="total_amount" t-value="total_amount+line.total"/>
+                                    </t>
+                                    <tr>
+                                        <td colspan="7" style="text-align: right;">
+                                            <strong>Total:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-esc="total_amount"/>
+                                        </td>
+                                    </tr>
+                            </table>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <!--        .......................................................................................................................-->
+        <report id="labour_payment_details_report_print" string="Labour Payment Report"
+                model="labour.payment.report" report_type="qweb-pdf"
+                name="hiworth_construction.report_labour_payment_details_template_view"/>
+        <report id="view_labour_payment_details_report_print" string="Labour Payment Report"
+                model="labour.payment.report" report_type="qweb-pdf"
+                name="hiworth_construction.report_labour_payment_details_template_view"/>
+
+        <record id="action_labour_payment_report_details_wizard_form" model="ir.actions.act_window">
+            <field name="name">Labour Payment Work Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">labour.payment.report</field>
+            <field name="target">new</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_labour_payment_wizard_form"/>
+        </record>
+        <menuitem
+                id="menu_labour_payment_daily_report"
+                action="action_labour_payment_report_details_wizard_form"
+                name="Labour Payment Report"
+                parent="hiworth_project_management.menu_work_report"
+                sequence="4"/>
+    </data>
+</openerp>

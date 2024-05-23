@@ -1,0 +1,73 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+boq_access_user1,Grant rw to boq,model_bill_of_quantity,hiworth_hr_attendance.group_admin,1,1,1,0
+boq_access_user2,Grant rw to boq,model_bill_of_quantity,hiworth_hr_attendance.group_technical_team,1,1,1,0
+boq_access_user3,Grant rw to boq,model_bill_of_quantity,hiworth_hr_attendance.group_liaisoning,1,1,1,0
+boq_line_access_user1,Grant rw to boq line,model_bill_of_quantity_line,hiworth_hr_attendance.group_admin,1,1,1,0
+boq_line_access_user2,Grant rw to boq line,model_bill_of_quantity_line,hiworth_hr_attendance.group_technical_team,1,1,1,0
+boq_line_access_user3,Grant rw to boq line,model_bill_of_quantity_line,hiworth_hr_attendance.group_liaisoning,1,1,1,0
+product_boq_access_user1,Grant rw to product boq,model_product_boq_line,hiworth_hr_attendance.group_admin,1,1,1,1
+product_boq_access_user2,Grant rw to product boq,model_product_boq_line,hiworth_hr_attendance.group_technical_team,1,1,1,1
+product_boq_access_user3,Grant rw to product boq,model_product_boq_line,hiworth_hr_attendance.group_liaisoning,1,1,1,1
+block_access_user1,Grant rw to block,model_master_block,hiworth_hr_attendance.group_admin,1,1,1,0
+block_access_user2,Grant rw to block,model_master_block,hiworth_hr_attendance.group_technical_team,1,1,1,0
+block_access_user3,Grant rw to block,model_master_block,hiworth_hr_attendance.group_liaisoning,1,1,1,0
+village_access_user1,Grant rw to village,model_master_village,hiworth_hr_attendance.group_admin,1,1,1,0
+village_access_user2,Grant rw to village,model_master_village,hiworth_hr_attendance.group_technical_team,1,1,1,0
+village_access_user3,Grant rw to village,model_master_village,hiworth_hr_attendance.group_liaisoning,1,1,1,0
+thaluk_access_user1,Grant rw to thaluk,model_master_thaluk,hiworth_hr_attendance.group_admin,1,1,1,0
+thaluk_access_user2,Grant rw to thaluk,model_master_thaluk,hiworth_hr_attendance.group_technical_team,1,1,1,0
+thaluk_access_user3,Grant rw to thaluk,model_master_thaluk,hiworth_hr_attendance.group_liaisoning,1,1,1,0
+district_access_user1,Grant rw to district,model_master_district,hiworth_hr_attendance.group_admin,1,1,1,0
+district_access_user2,Grant rw to district,model_master_district,hiworth_hr_attendance.group_technical_team,1,1,1,0
+district_access_user3,Grant rw to district,model_master_district,hiworth_hr_attendance.group_liaisoning,1,1,1,0
+sub_district_access_user1,Grant rw to sub district,model_master_sub_district,hiworth_hr_attendance.group_admin,1,1,1,0
+sub_district_access_user2,Grant rw to sub district,model_master_sub_district,hiworth_hr_attendance.group_technical_team,1,1,1,0
+sub_district_access_user3,Grant rw to sub district,model_master_sub_district,hiworth_hr_attendance.group_liaisoning,1,1,1,0
+panchayath_access_user1,Grant rw to panchayath,model_master_panchayath,hiworth_hr_attendance.group_admin,1,1,1,0
+panchayath_access_user2,Grant rw to panchayath,model_master_panchayath,hiworth_hr_attendance.group_technical_team,1,1,1,0
+panchayath_access_user3,Grant rw to panchayath,model_master_panchayath,hiworth_hr_attendance.group_liaisoning,1,1,1,0
+property_details_access_user1,Grant rw to property_details,model_property_details,hiworth_hr_attendance.group_admin,1,1,1,0
+property_details_access_user2,Grant rw to property_details,model_property_details,hiworth_hr_attendance.group_technical_team,1,1,1,0
+property_details_access_user3,Grant rw to property_details,model_property_details,hiworth_hr_attendance.group_liaisoning,1,1,1,0
+account_access_user1,Grant rw to account,model_account_invoice,hiworth_hr_attendance.group_admin,1,1,1,0
+account_access_user2,Grant rw to account,model_account_invoice,hiworth_hr_attendance.group_technical_team,1,1,1,0
+account_access_user3,Grant rw to account,model_account_invoice,hiworth_hr_attendance.group_liaisoning,1,1,1,0
+invoice_line_access_user1,Grant rw to invoice line,model_account_invoice_line,hiworth_hr_attendance.group_admin,1,1,1,0
+invoice_line_access_user2,Grant rw to invoice line,model_account_invoice_line,hiworth_hr_attendance.group_technical_team,1,1,1,0
+invoice_line_access_user3,Grant rw to invoice line,model_account_invoice_line,hiworth_hr_attendance.group_liaisoning,1,1,1,0
+invoice_tax_access_user1,Grant rw to invoice tax,account.model_account_invoice_tax,hiworth_hr_attendance.group_admin,1,1,1,0
+invoice_tax_access_user2,Grant rw to invoice tax,account.model_account_invoice_tax,hiworth_hr_attendance.group_technical_team,1,1,1,0
+invoice_tax_access_user3,Grant rw to invoice tax,account.model_account_invoice_tax,hiworth_hr_attendance.group_liaisoning,1,1,1,0
+move_line_access_user1,Grant rw to move line,account.model_account_move_line,hiworth_hr_attendance.group_admin,1,1,1,0
+move_line_access_user2,Grant rw to move line,account.model_account_move_line,hiworth_hr_attendance.group_technical_team,1,1,1,0
+move_line_access_user3,Grant rw to move line,account.model_account_move_line,hiworth_hr_attendance.group_liaisoning,1,1,1,0
+company_access_user1,Grant rw to company,hiworth_hr_attendance.model_res_company_new,hiworth_hr_attendance.group_admin,1,1,1,0
+company_access_user2,Grant rw to company,hiworth_hr_attendance.model_res_company_new,hiworth_hr_attendance.group_technical_team,1,1,1,0
+company_access_user3,Grant rw to company,hiworth_hr_attendance.model_res_company_new,hiworth_hr_attendance.group_liaisoning,1,1,1,0
+project_access_user1,Grant rw to project project,project.model_project_project,hiworth_hr_attendance.group_admin,1,1,1,0
+project_access_user2,Grant rw to project project,project.model_project_project,hiworth_hr_attendance.group_technical_team,1,1,1,0
+project_access_user3,Grant rw to project project,project.model_project_project,hiworth_hr_attendance.group_liaisoning,1,1,1,0
+account_journal_access_user1,Grant rw to account journal,account.model_account_journal,hiworth_hr_attendance.group_admin,1,1,1,0
+account_journal_access_user2,Grant rw to account journal,account.model_account_journal,hiworth_hr_attendance.group_technical_team,1,1,1,0
+account_journal_access_user3,Grant rw to account journal,account.model_account_journal,hiworth_hr_attendance.group_liaisoning,1,1,1,0
+bill_status_access_user1,Grant rw to bill status,model_bill_status,hiworth_hr_attendance.group_admin,1,1,1,0
+bill_status_access_user2,Grant rw to bill status,model_bill_status,hiworth_hr_attendance.group_technical_team,1,1,1,0
+bill_status_access_user3,Grant rw to bill status,model_bill_status,hiworth_hr_attendance.group_liaisoning,1,1,1,0
+project_task_estimation_access_user1,Grant rw to project_task_estimation,hiworth_construction.model_project_task_estimation,hiworth_hr_attendance.group_admin,1,1,1,0
+project_task_estimation_access_user2,Grant rw to project_task_estimation,hiworth_construction.model_project_task_estimation,hiworth_hr_attendance.group_technical_team,1,1,1,0
+project_task_estimation_access_user3,Grant rw to project_task_estimation,hiworth_construction.model_project_task_estimation,hiworth_hr_attendance.group_liaisoning,1,1,1,0
+bill_deductions_access_user1,Grant rw to bill deductions,model_bill_deductions,hiworth_hr_attendance.group_admin,1,1,1,0
+bill_deductions_access_user2,Grant rw to bill deductions,model_bill_deductions,hiworth_hr_attendance.group_technical_team,1,1,1,0
+bill_deductions_access_user3,Grant rw to bill deductions,model_bill_deductions,hiworth_hr_attendance.group_liaisoning,1,1,1,0
+master_deduction_access_user1,Grant rw to deduction master,model_master_deduction,hiworth_hr_attendance.group_admin,1,1,1,0
+master_deduction_access_user2,Grant rw to deduction master,model_master_deduction,hiworth_hr_attendance.group_technical_team,1,1,1,0
+master_deduction_access_user3,Grant rw to deduction master,model_master_deduction,hiworth_hr_attendance.group_liaisoning,1,1,1,0
+item_type_user1,Grant rw to item_type,model_item_type,hiworth_hr_attendance.group_admin,1,1,1,0
+item_type_user2,Grant rw to item_type,model_item_type,hiworth_hr_attendance.group_technical_team,1,1,1,0
+item_type_user3,Grant rw to item_type,model_item_type,hiworth_hr_attendance.group_liaisoning,1,1,1,0
+steel_config_user1,Grant rw to steel_config,model_steel_config,hiworth_hr_attendance.group_admin,1,1,1,0
+steel_config_user2,Grant rw to steel_config,model_steel_config,hiworth_hr_attendance.group_technical_team,1,1,1,0
+steel_config_user3,Grant rw to steel_config,model_steel_config,hiworth_hr_attendance.group_liaisoning,1,1,1,0
+steel_product_boq_user1,Grant rw to steel_product_boq,model_steel_product_boq,hiworth_hr_attendance.group_admin,1,1,1,1
+steel_product_boq_user2,Grant rw to steel_product_boq,model_steel_product_boq,hiworth_hr_attendance.group_technical_team,1,1,1,1
+steel_product_boq_user3,Grant rw to steel_product_boq,model_steel_product_boq,hiworth_hr_attendance.group_liaisoning,1,1,1,1

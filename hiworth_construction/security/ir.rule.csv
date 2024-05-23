@@ -1,0 +1,11 @@
+id,name,model_id/id,domain_force,perm_read,perm_write,perm_create,perm_unlink
+,,,,,,,
+,,,,,,,
+__export__.ir_cash_confirm_transfer,CashConfirmTranfer,hiworth_construction.model_cash_confirm_transfer,"['|',('name','=',user.employee_id.id),('user_id','=',user.employee_id.id)]",True,True,False,False
+
+__export__.ir_partner_daily_stmt,PartnerDailyStmt,hiworth_construction.model_partner_daily_statement,"['|',('employee_id','=',user.employee_id.id),('next_approver','=',user.id)]",True,True,True,False
+
+_export__.ir_rent_daily_stmt,RentVehicleStmt,hiworth_construction.model_rent_vehicle_statement,"[('supervisor','=',user.employee_id.id)]",True,True,True,False
+
+
+_export__.ir_site_purchase,SitePurchaseRule,hiworth_construction.model_site_purchase,"[('supervisor_id','=',user.employee_id.id)]",True,True,True,False

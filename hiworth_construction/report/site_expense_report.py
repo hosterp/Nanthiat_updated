@@ -1,0 +1,90 @@
+from openerp import fields, models, api
+
+
+class SiteExpenseReport(models.TransientModel):
+    _name = 'site.expense'
+
+    from_date = fields.Date('Date From')
+    to_date = fields.Date('Date To')
+    project_id = fields.Many2one('project.project', 'Project')
+
+    @api.multi
+    def get_labour_payment_products(self):
+        domain_labour_attendance = [('date', '>=', self.from_date), ('date', '<=', self.to_date)]
+        if self.project_id:
+            domain_labour_attendance.append(('attendance_id.project_id', '=', self.project_id.id))
+
+        labour_attendance = self.env['labour.attendance'].search(domain_labour_attendance)
+
+        domain_purchase_order = [('date_order', '>=', self.from_date), ('date_order', '<=', self.to_date)]
+        if self.project_id:
+            domain_purchase_order.append(('project_id', '=', self.project_id.id))
+
+        purchase_orders = self.env['purchase.order'].search(domain_purchase_order)
+
+        datas = []
+        data = {}
+
+
+        for rec in labour_attendance:
+            date = rec.date
+            if date in data:
+                data[date]['total_amount'] += rec.total
+            else:
+                data[date] = {'total_amount': rec.total}
+
+
+        for rec in purchase_orders:
+            date_str = rec.date_order.split(' ')[0] if rec.date_order else ''
+            if date_str in data:
+                data[date_str]['total_amount2'] = data[date_str].get('total_amount2', 0.0) + rec.amount_total
+            else:
+                data[date_str] = {'total_amount': 0.0, 'total_amount2': rec.amount_total}
+
+
+        for date, info in data.items():
+            datas.append({
+                'date': date,
+                'total_amount': info['total_amount'],
+                'total_amount2': info.get('total_amount2', 0.0),  # Default to 0.0 if 'total_amount2' is missing
+            })
+
+
+        for item in datas:
+            print("Date: {}, Total Amount: {}, Total Amount2: {}".format(item['date'], item['total_amount'],
+                                                                         item['total_amount2']))
+
+        return datas
+
+    @api.multi
+    def prin_site_expense_details_report(self):
+        datas = {
+            'ids': self._ids,
+            'model': self._name,
+            'form': self.read(),
+            'context': self._context,
+        }
+        return {
+            'type': 'ir.actions.report.xml',
+            'report_name': 'hiworth_construction.report_site_expense_details_template_view',
+            'datas': datas,
+            'report_type': 'qweb-pdf',
+            #             'context':{'start_date': self.from_date, 'end_date': self.to_date}
+        }
+
+    @api.multi
+    def view_site_expense_details_report(self):
+
+        datas = {
+            'ids': self._ids,
+            'model': self._name,
+            'form': self.read(),
+            'context': self._context,
+        }
+        return {
+            'type': 'ir.actions.report.xml',
+            'report_name': 'hiworth_construction.report_site_expense_details_template_view',
+            'datas': datas,
+            'report_type': 'qweb-html',
+            #             'context':{'start_date': self.from_date, 'end_date': self.to_date}
+        }

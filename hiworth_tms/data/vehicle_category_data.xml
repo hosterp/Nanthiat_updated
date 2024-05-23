@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		<record model="vehicle.category.type" id="vehicle_category_eicher1">
+			<field name="name">Eicher</field>
+			<field name="type">view</field>
+		</record>
+
+		<record model="vehicle.category.type" id="vehicle_category_taurus">
+			<field name="name">Taurus</field>
+			<field name="type">view</field>
+		</record>
+
+		<record model="vehicle.category.type" id="vehicle_category_pickup">
+			<field name="name">Pick-up</field>
+			<field name="type">view</field>
+		</record>
+
+		<record model="vehicle.category.type" id="vehicle_category_jcb">
+			<field name="name">JCB</field>
+			<field name="type">view</field>
+		</record>
+
+		<record model="vehicle.category.type" id="vehicle_category_lt">
+			<field name="name">L &amp; T</field>
+			<field name="type">view</field>
+		</record>
+
+		<record model="vehicle.category.type" id="vehicle_category_soil_compactor">
+			<field name="name">Soil Compactor</field>
+			<field name="type">view</field>
+		</record>
+
+		<record model="vehicle.category.type" id="vehicle_category_bobcat">
+			<field name="name">Bobcat</field>
+			<field name="type">view</field>
+		</record>
+
+
+		<record model="ir.cron" id="daily_machinary_contract">
+            <field name="name">Machinary Contract Creation</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model" eval="'fleet.vehicle'"/>
+            <field name="function" eval="'_cron_fleet_contract'"/>
+            <field name="args" eval="'()'" />
+            <field name="nextcall" >2018-10-12 00:00:01</field>
+        </record>
+
+	</data>
+</openerp>
+
+		

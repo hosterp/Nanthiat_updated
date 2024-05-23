@@ -1,0 +1,2 @@
+"id","name","model_id/id","domain_force","groups/id","perm_read","perm_write","perm_create","perm_unlink"
+"hr_employee_attendance rule","user rule","hiworth_hr_attendance.model_hr_employee","[('id','=',user.employee_id.id)]","","True","True","True","False"

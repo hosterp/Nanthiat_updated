@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+    <t t-name='popup_title_notif_event'>
+        <p style="display:none;" id="p200_id"><t t-esc="id"/></p>
+        Hi <t t-esc="reviewer_id"/><br/><br/><t t-esc="user_id"/> has changed status of '<t t-esc="title"/>'Task to completed <br/>
+    </t>
+    <t t-name='popup_title_notif_man'>
+        <p style="display:none;" id="p115_id"><t t-esc="id"/></p>
+        Hi <t t-esc="user"/>,<br/><br/>Admin Approved Your Reply Of Requirement message <br/>
+        Message :<t t-esc="title"/>'<br/><br/>
+    </t>
+    <t t-name='popup_title'>
+        <p style="display:none;" id="p_id"><t t-esc="id"/></p>
+        Hi <t t-esc="assigned_to"/>,<br/><br/>You Have a New Activity..<br/><br/>
+        Assigned By :<i><t t-esc="user"/><br/><br/></i>
+        Activity: <i><t t-esc="title"/></i>
+    </t>
+    <t t-name='popup_title_file_cust'>
+        <p style="display:none;" id="p70_id"><t t-esc="id"/></p>
+        Hi <t t-esc="logged_user"/>,<br/><br/>You Have New File Transfer Content<br/><br/>
+    </t>
+    <t t-name='popup_title_workreport_admin'>
+        <p style="display:none;" id="p71_id"><t t-esc="id"/></p>
+        Hi <t t-esc="to_id"/>,<br/><br/>You Have New Work Report To Approve<br/><br/>
+    </t>
+    <t t-name='popup_title_workreport_man'>
+        <p style="display:none;" id="p72_id"><t t-esc="id"/></p>
+        Hi <t t-esc="manager"/>,<br/><br/>You Have New Work Report To Approve<br/><br/>
+    </t>
+    <t t-name='popup_title_workreport_sent'>
+        <p style="display:none;" id="p73_id"><t t-esc="id"/></p>
+        Hi <t t-esc="sent_report"/>,<br/><br/>You Have New Work Report To Approve<br/><br/>
+    </t>
+    <!-- <t t-name='popup_title_leave'>
+        <p style="display:none;" id="p74_id"><t t-esc="id"/></p>
+        Hi <t t-esc="admin"/>,<br/><br/>You Have One Leave Request From <i><t t-esc="employee_id"/></i> Approve<br/><br/>
+    </t> -->
+    <t t-name='popup_footer'>
+    	Please Complete The Above Activity
+        <!-- <br/><br/> -->
+        <center><button class='link2showed oe_highlight oe_form oe_button'><span>OK</span></button></center>
+    </t>
+    <t t-name='popup_title_msg'>
+        <p style="display:none;" id="p1_id"><t t-esc="id"/></p>
+        
+        Message From :<i><t t-esc="user"/><br/><br/></i>
+        Category : <i><t t-esc="message_type"/><br/><br/></i>
+        Message: <i><t t-esc="title"/></i>
+    </t>
+    <t t-name='popup_title_adm'>
+        <p style="display:none;" id="p2_id"><t t-esc="id"/></p>
+        
+        You Have One New Message From <i><t t-esc="user"/></i> To Approve...
+    </t>
+    <t t-name='popup_title_task_adm'>
+        <p style="display:none;" id="p45_id"><t t-esc="id"/></p>
+        
+        You Have One Task Message From <i><t t-esc="user"/></i> To Approve...
+    </t>
+    <t t-name='popup_title_site'>
+        <p style="display:none;" id="p5_id"><t t-esc="id"/></p>
+        Hi <t t-esc="visit_by"/>,<br/><br/>
+        
+        You Have One Site Visit Activity: <i><t t-esc="title"/></i><br/><br/>
+        Assigned By :<i><t t-esc="user"/></i>
+    </t>
+     <t t-name='popup_title_general'>
+        <p style="display:none;" id="p6_id"><t t-esc="id"/></p>
+        Hi <t t-esc="logged"/>,<br/><br/>You Have a New General Message From <i><b><t t-esc="user"/></b></i>..<br/><br/>
+        Message: <i><t t-esc="title"/></i>
+    </t>
+     <t t-name='popup_title10'>
+        <p style="display:none;" id="p10_id"><t t-esc="id"/></p>
+        Hi <t t-esc="assigned_to"/>,<br/>You Have A New Task To Complete<br/>
+        Project Manager :<i><t t-esc="user"/> <br/><br/></i>
+        Task Name: <i><t t-esc="title"/></i><br/>
+    </t>
+    <t t-name='popup_footer_msg'>
+    	Thank You...!!!
+        <center><button class='link2showed oe_highlight oe_form oe_button'><span>OK</span></button></center>
+    </t>
+</template>
