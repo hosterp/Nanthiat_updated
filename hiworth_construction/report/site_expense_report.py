@@ -10,51 +10,65 @@ class SiteExpenseReport(models.TransientModel):
 
     @api.multi
     def get_labour_payment_products(self):
+        # Define the domains for labour attendance and purchase orders based on the given date range
         domain_labour_attendance = [('date', '>=', self.from_date), ('date', '<=', self.to_date)]
         if self.project_id:
             domain_labour_attendance.append(('attendance_id.project_id', '=', self.project_id.id))
-
         labour_attendance = self.env['labour.attendance'].search(domain_labour_attendance)
 
         domain_purchase_order = [('date_order', '>=', self.from_date), ('date_order', '<=', self.to_date)]
         if self.project_id:
             domain_purchase_order.append(('project_id', '=', self.project_id.id))
-
         purchase_orders = self.env['purchase.order'].search(domain_purchase_order)
 
-        datas = []
+        # Initialize data structures
         data = {}
+        products_map = {}
 
-
+        # Process labour attendance records
         for rec in labour_attendance:
             date = rec.date
             if date in data:
                 data[date]['total_amount'] += rec.total
             else:
-                data[date] = {'total_amount': rec.total}
+                data[date] = {'total_amount': rec.total, 'total_amount2': 0.0}
 
-
+        # Process purchase orders and their lines
         for rec in purchase_orders:
             date_str = rec.date_order.split(' ')[0] if rec.date_order else ''
             if date_str in data:
-                data[date_str]['total_amount2'] = data[date_str].get('total_amount2', 0.0) + rec.amount_total
+                data[date_str]['total_amount2'] += rec.amount_total
             else:
                 data[date_str] = {'total_amount': 0.0, 'total_amount2': rec.amount_total}
 
+            # Collect products related to the purchase order
+            for line in rec.order_line:
+                if date_str in products_map:
+                    products_map[date_str].append(line.product_id)
+                else:
+                    products_map[date_str] = [line.product_id]
+                print(line.product_id.name, 'product....................')
 
+        # Combine data and products for the final output
+        datas = []
         for date, info in data.items():
             datas.append({
                 'date': date,
                 'total_amount': info['total_amount'],
-                'total_amount2': info.get('total_amount2', 0.0),  # Default to 0.0 if 'total_amount2' is missing
+                'total_amount2': info['total_amount2'],
+                'products': products_map.get(date, [])
             })
 
-
+        # Display the combined data for debugging
         for item in datas:
-            print("Date: {}, Total Amount: {}, Total Amount2: {}".format(item['date'], item['total_amount'],
-                                                                         item['total_amount2']))
+            print("Date: {}, Total Amount: {}, Total Amount2: {}, Products: {}".format(
+                item['date'], item['total_amount'], item['total_amount2'],
+                [product.name for product in item['products']]
+            ))
 
-        return datas
+        # Return the combined data and a list of all products found
+        all_products = [product for products in products_map.values() for product in products]
+        return datas, all_products
 
     @api.multi
     def prin_site_expense_details_report(self):

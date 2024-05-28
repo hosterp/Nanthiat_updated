@@ -86,7 +86,9 @@
                                     <td>
                                         <b>Date</b>
                                     </td>
-
+                                    <td>
+                                        <b>Products</b>
+                                    </td>
                                     <td>
                                         <b>Purchase Payment Details</b>
                                     </td>
@@ -108,10 +110,17 @@
                                 </tr>
                                 <t t-set="total_amounts" t-value="0"/>
                                 <t t-set="grant_total" t-value="0"/>
-                                <t t-foreach="o.get_labour_payment_products()" t-as="line">
+                                <t t-foreach="o.get_labour_payment_products()[0]" t-as="line">
                                     <tr>
                                         <td>
                                             <span t-esc="line['date'][8:10] + '-' + line['date'][5:7] + '-' + line['date'][0:4]"/>
+                                        </td>
+                                        <td>
+                                            <t t-set="product_names" t-value="[]"/>
+                                            <t t-foreach="line['products']" t-as="product">
+                                                <t t-set="product_names" t-value="product_names + [product.name]"/>
+                                            </t>
+                                            <span t-esc="', '.join(product_names)"/>
                                         </td>
                                         <td>
                                             <span t-esc="line['total_amount2']"/>
@@ -134,7 +143,7 @@
                                     <td>
                                         <span>TOTAL</span>
                                     </td>
-                                    <td col="2">
+                                    <td col="3">
                                         <strong>
                                             <span t-esc="grant_total"/>
                                         </strong>
@@ -165,12 +174,12 @@
             <field name="view_mode">form</field>
             <field name="view_id" ref="view_site_expense_wizard_form"/>
         </record>
-<!--        <menuitem-->
-<!--                id="menu_site_expense_report"-->
-<!--                action="action_site_expense_wizard_form"-->
-<!--                name="Site Expense Report"-->
-<!--                parent="hiworth_project_management.menu_work_report"-->
-<!--                sequence="6"/>-->
+        <!--        <menuitem-->
+        <!--                id="menu_site_expense_report"-->
+        <!--                action="action_site_expense_wizard_form"-->
+        <!--                name="Site Expense Report"-->
+        <!--                parent="hiworth_project_management.menu_work_report"-->
+        <!--                sequence="6"/>-->
         <menuitem name="Site Expense"
                   id="site_expense"
                   action="action_site_expense_wizard_form"
