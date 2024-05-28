@@ -92,7 +92,9 @@
                                     <td>
                                         <b>Purchase Payment Details</b>
                                     </td>
-
+                                    <td>
+                                        <b>Labours</b>
+                                    </td>
 
                                     <td>
                                         <b>Labour Payments</b>
@@ -124,6 +126,11 @@
                                         </td>
                                         <td>
                                             <span t-esc="line['total_amount2']"/>
+                                        </td>
+                                        <td>
+                                            <t t-foreach="line['category']" t-as="category">
+                                                <span t-esc="category"/>
+                                            </t>
                                         </td>
                                         <td>
                                             <span t-esc="line['total_amount']"/>

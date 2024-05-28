@@ -27,6 +27,7 @@ class SiteExpenseReport(models.TransientModel):
 
         # Process labour attendance records
         for rec in labour_attendance:
+            print(rec.category_id.name,'category.............................')
             date = rec.date
             if date in data:
                 data[date]['total_amount'] += rec.total
@@ -52,17 +53,19 @@ class SiteExpenseReport(models.TransientModel):
         # Combine data and products for the final output
         datas = []
         for date, info in data.items():
+            category_names = [rec.category_id.name for rec in labour_attendance if rec.date == date]
             datas.append({
                 'date': date,
                 'total_amount': info['total_amount'],
                 'total_amount2': info['total_amount2'],
+                'category': ', '.join(category_names),
                 'products': products_map.get(date, [])
             })
 
         # Display the combined data for debugging
         for item in datas:
-            print("Date: {}, Total Amount: {}, Total Amount2: {}, Products: {}".format(
-                item['date'], item['total_amount'], item['total_amount2'],
+            print("Date: {}, Total Amount: {}, Total Amount2: {}, category:{},Products: {}".format(
+                item['date'], item['total_amount'], item['total_amount2'],  item['category'],
                 [product.name for product in item['products']]
             ))
 
@@ -70,6 +73,11 @@ class SiteExpenseReport(models.TransientModel):
         all_products = [product for products in products_map.values() for product in products]
         return datas, all_products
 
+    def get_category(self, date, products):
+        attendance_records = self.env['labour.attendance'].search([('date', '=', date), ('category_id', '!=', False)])
+        if attendance_records:
+            return attendance_records[0].category_id.name
+        return False
     @api.multi
     def prin_site_expense_details_report(self):
         datas = {
