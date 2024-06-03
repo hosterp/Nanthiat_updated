@@ -327,7 +327,7 @@
 								<field name="attendance_ids" nolabel="1">
 									<tree editable="bottom">
 <!--										<field name="attendance_id" invisible="1"/>-->
-										<field name="date"/>
+										<field name="date" required="1"/>
 										<field name="category_id"/>
 										<field name="name_of_worker"/>
 										<field name="grade"/>
