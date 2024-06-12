@@ -112,7 +112,7 @@
                                 </tr>
                                 <t t-set="total_amounts" t-value="0"/>
                                 <t t-set="grant_total" t-value="0"/>
-                                <t t-foreach="o.get_labour_payment_products()[0]" t-as="line">
+                                <t t-foreach="o.get_labour_payment_products()" t-as="line">
                                     <tr>
                                         <td>
                                             <span t-esc="line['date'][8:10] + '-' + line['date'][5:7] + '-' + line['date'][0:4]"/>
