@@ -37,7 +37,7 @@ class SiteExpenseReport(models.TransientModel):
         for rec in purchase_orders:
             date_str = rec.date_order.split(' ')[0] if rec.date_order else ''
             if date_str in data:
-                data[date_str]['total_amount2'] = rec.amount_total
+                data[date_str]['total_amount2'] += rec.amount_total
             else:
                 data[date_str] = {'total_amount': 0.0, 'total_amount2': rec.amount_total}
 
